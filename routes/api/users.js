@@ -52,4 +52,32 @@ router.post('/register', (req, res) => {
     .catch(err => console.log(err));
 });
 
+// @route   POST api/user/login
+// @desc    Login user
+// @access  public
+router.post('/login', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+
+    User.findOne({email})
+    .then(user => {
+        if (!user){
+            return res.status(400).json({email: 'user not found'});
+        }
+
+        //check password
+
+        bcrypt.compare(password, user.password)
+        .then(isMatch => {
+            if (isMatch){
+                return res.json({msg: 'Success'});
+            }
+            return res.status(400).json({password: 'Password incorrect'});
+        });
+    })
+    .catch(err => console.log(err));
+})
+
+
 module.exports = router;
