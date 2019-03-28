@@ -25,10 +25,10 @@ router.post('/register',(req,res) => {
     if(!isValid){
         return res.status(400).json(errors);
     }
-   User.findOne({email: req.body.email})
+   User.findOne({username: req.body.username})
    .then(user => {
        if (user) {
-           errors.email= 'Email already exists';
+           errors.username= 'username already exists';
            return res.status(400).json(errors);
        } else {
           /* const avatar = gravatar.url(req.body.email,{
@@ -38,9 +38,9 @@ router.post('/register',(req,res) => {
            });*/
            const newUser = new User({
                name: req.body.name,
-               email:req.body.email,
+               username:req.body.username,
                password:req.body.password,
-               avatar         //avatar:avatar
+              // avatar         //avatar:avatar
            });
            bcrypt.genSalt(10,(err,salt) => {    //generate a salt(key) after going 10 cycle.
                if (err){
@@ -68,7 +68,7 @@ router.post('/register',(req,res) => {
 //@ access public 
 
 router.post('/login',(req,res) => {
-    const email = req.body.email;
+    const username = req.body.username;
     const password = req.body.password;
 
     const {errors,isValid} = validateLoginInput(req.body);
@@ -77,10 +77,10 @@ router.post('/login',(req,res) => {
         return res.status(400).json(errors);
     }
     
-    User.findOne({email})
+    User.findOne({username})
      .then(user =>{
          if(!user){
-             errors.email ='user not found';
+             errors.username ='user not found';
              return res.status(400).json(errors);
          }
          //check password
@@ -92,7 +92,8 @@ router.post('/login',(req,res) => {
                 const payload = {
                     id: user.id,
                     name: user.name,
-                    avatar: user.avatar
+                    username:user.username
+                    //avatar: user.avatar
                 };
                 //sign token
                 jwt.sign(payload, keys.secretOrKey,{expiresIn:3600 },
@@ -126,7 +127,7 @@ passport.authenticate('jwt',{session:false}),
     res.json({
         id: req.user.id,
         name:req.user.name,
-        email:req.user.email
+        username:req.user.username
 
     });
 

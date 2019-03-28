@@ -6,15 +6,15 @@ const UserSchema = new Schema({
       type:String,
       required:true
   },
-  email:{
+/*  email:{
       type:String,
       required:true
-  },
+  },*/
   password:{
     type:String,
     required:true
   },
-  handle:{
+  username:{
       type:String,
       required:false
   },

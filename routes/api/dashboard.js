@@ -23,23 +23,23 @@ router.get('/',(req,res) =>{
   passport.authenticate('jwt',{session:false})
 
   Profile.findOne({user: req.user.id})
-  .populate('user', ['name', 'photo'])
+  .populate('user', ['name'])
   .then(user => res.json(user))
   .catch(err => res.status(404).json(err));
 
 });
 
-// @route   GET api/dashboard/handle/:handle
-// @desc    Get dashboard by handle
+// @route   GET api/dashboard/username/:username
+// @desc    Get dashboard by username
 // @access  Public 
 
-router.get('/handle',(req,res) => {
+router.get('/username',(req,res) => {
  const errors = {};
-  Profile.findOne({handle:req.params.handle})
-  .populate('user', ['name', 'photo'])
+  Profile.findOne({username:req.params.username})
+  .populate('user', ['name'])
   .then(profile => {
     if(!profile){
-        errors.nouser = 'There is no user exist of this handle ';
+        errors.nouser = 'There is no user exist of this username ';
         return res.status(404).json(errors);
     }
     res.json(profile)
@@ -49,7 +49,7 @@ router.get('/handle',(req,res) => {
 });
 
 // @route   GET api/dashboard/follow
-// @desc    all user handle with photo
+// @desc    all user username with photo
 // @access  Public 
 router.get('/follow',(req,res) => {
    const errors = {}; 
@@ -68,10 +68,10 @@ router.get('/follow',(req,res) => {
 // @route   GET api/dashboard/followed by
 // @desc     get to user dashboard whos is following
 // @access  Public 
-router.get('/followed by/handle',(req,res) =>{
+router.get('/followed by/username',(req,res) =>{
     const errors = {};
-    Profile.findOne({handle:profile.handle})
-    .populate('user', ['name', 'photo'])
+    Profile.findOne({username:profile.username})
+    .populate('user', ['name'])
     .then(profile => {
         if(!profile){
             errors.nouser = 'there are no user to followed';
@@ -103,9 +103,9 @@ router.post('/edit',(req,res) =>{
 //get fields
     const profileFields = {};
     profileFields.user = req.user.id;
-    profileFields.email = req.user.email;
-    if (req.body.handle) profileFields.handle = req.body.handle;
-    if (req.body.phone) profileFields.location = req.body.phone;
+    profileFields.username = req.user.username;
+    if (req.body.email) profileFields.email = req.body.email;
+    if (req.body.phone) profileFields.phone = req.body.phone;
     if (req.body.bio) profileFields.bio = req.body.bio;
     if (req.body.website) profileFields.website = req.body.website;
     if (req.body.gender) profileFields.gender = req.body.gender;
@@ -129,11 +129,11 @@ router.post('/edit',(req,res) =>{
          }else {
              //create
 
-             //check if handle exists
-             Profile.findOne({handle:profileFields.handle})
+             //check if username exists
+             Profile.findOne({username:profileFields.username})
              .then(profile => {
                 if (profile) { 
-                 errors.handle='that handle already exist';
+                 errors.username='that username already exist';
                  res.status(400).json(errors);
                 }
                 //save profile
