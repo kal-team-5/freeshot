@@ -15,16 +15,34 @@ const ProfileSchema = new Schema({
     type: String
   },
   phone:{
-    type:Number
+    type:String
   },
   website: {
     type: String
   },
   gender:{
-     type:Boolean
+     type:String
   },
   email:{
     type:String
+  },
+  
+social: {
+    youtube: {
+      type: String
+    },
+    twitter: {
+      type: String
+    },
+    facebook: {
+      type: String
+    },
+    linkedin: {
+      type: String
+    },
+    instagram: {
+      type: String
+    }
   },
   following:[
     {
@@ -43,27 +61,10 @@ const ProfileSchema = new Schema({
      }
     }
   ],
-social: {
-    youtube: {
-      type: String
-    },
-    twitter: {
-      type: String
-    },
-    facebook: {
-      type: String
-    },
-    linkedin: {
-      type: String
-    },
-    instagram: {
-      type: String
-    }
-  },
   date: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = Profile = mongoose.model('profile', ProfileSchema);
+module.exports = Profile = mongoose.model('dashboard', ProfileSchema);

@@ -9,8 +9,8 @@ const passport = require('passport');
 //load user model
 const User = require('../../models/User');
 //load input validation
-//const validateRegisterInput = require ('../../validation/register');
-//const validateLoginInput = require ('../../validation/login');
+const validateRegisterInput = require ('../../validation/register');
+const validateLoginInput = require ('../../validation/login');
 
 
 //router.get('/test',(req,res) => res.json({msg:'users api works'}));
@@ -20,7 +20,7 @@ const User = require('../../models/User');
 //@ access public 
 
 router.post('/register',(req,res) => {
-    //const {errors,isValid} = validateRegisterInput(req.body);
+     const {errors,isValid} = validateRegisterInput(req.body);
     //check validation
     if(!isValid){
         return res.status(400).json(errors);
@@ -39,7 +39,7 @@ router.post('/register',(req,res) => {
            const newUser = new User({
                name: req.body.name,
                username:req.body.username,
-               password:req.body.password,
+               password:req.body.password
               // avatar         //avatar:avatar
            });
            bcrypt.genSalt(10,(err,salt) => {    //generate a salt(key) after going 10 cycle.
@@ -92,8 +92,8 @@ router.post('/login',(req,res) => {
                 const payload = {
                     id: user.id,
                     name: user.name,
-                    username:user.username
-                    //avatar: user.avatar
+                    username: user.username
+                    
                 };
                 //sign token
                 jwt.sign(payload, keys.secretOrKey,{expiresIn:3600 },

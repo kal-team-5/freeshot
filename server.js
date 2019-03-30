@@ -33,5 +33,5 @@ app.use('/api/user',users);
 app.use('/api/dashboard',dashboard);
 
 
-const port = process.env.PORT || 5200;
+const port = process.env.PORT || 5300;
 app.listen(port,() => console.log(`server running on port ${port}`));
