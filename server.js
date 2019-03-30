@@ -7,7 +7,10 @@ const app  = express();
 const db = require('./config/keys').mongoURI;
 const users = require('./routes/api/users');
 
+//routing
+const imageRouter = require("./routes/api/image-router");
 const dashboard = require('./routes/api/dashboard');
+
 
 //Body parser middleware
 app.use(bodyparser.urlencoded({extended:false}));
@@ -25,13 +28,16 @@ app.use(passport.initialize());
 //psssport config
 require('./config/passport')(passport);
 
-
-app.get('/',(req,res) => res.send('hello!'));
+app.get("/", (req, res) => res.send("Welcome to FreeShot Middleware"));
 
 //first route
-app.use('/api/user',users);
-app.use('/api/dashboard',dashboard);
-
+app.use('/freeshot/user',users);
+app.use('/freeshot/dashboard',dashboard);
+//Configure routes
+app.use("/freeshot/image", imageRouter);
 
 const port = process.env.PORT || 5300;
 app.listen(port,() => console.log(`server running on port ${port}`));
+
+app.get("/freeshot", (req, res) => res.send("Welcome to FreeShot Middleware"));
+
