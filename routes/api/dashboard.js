@@ -18,23 +18,30 @@ const validateProfileInput = require('../../validation/profile');
 // @route   GET api/dashboard
 // @desc    Get current user
 // @access  Private
-router.get('/',(req,res) =>{
+router.get('/',
+  passport.authenticate('jwt',{session:false}),
+  (req,res) =>{
     const errors = {}; 
-  passport.authenticate('jwt',{session:false})
-
-  Profile.findOne({user: req.user.id})
-  .populate('user', ['name'])
-  .then(user => res.json(user))
+    Profile.findOne({user: req.user.id})
+    .populate('user', ['name'])
+    .then(profile => {
+      if (!profile){
+         errors.noprofile = 'There is no profile for this user';
+         return res.status(404).json(errors);
+       }
+    res.json(profile);
+  })
   .catch(err => res.status(404).json(err));
-
-});
+}
+)
 
 // @route   GET api/dashboard/username/:username (search bar)
 // @desc    Get dashboard by username
 // @access  Public 
 
-router.get('/:username',(req,res) => {
+router.get('/:username', (req,res) => {
  const errors = {};
+
   Profile.findOne({username:req.params.username})
   .populate('user', ['name'])
   .then(profile => {
@@ -76,34 +83,35 @@ router.post('/follow/:id',
   
     const errors = {}; 
     Profile.findOne({user:req.user.id})
-    .then(profile => {
-         Profile.findById(req.params.id).then(profile => {
+      .then(profile => {
+           Profile.findOne({user : req.params.id})
+           .then(profile => {
+            if(profile.followers.filter(followers => followers.user.toString()===req.user.id).length>0)
+          {
+            return res.json(400).json({ alreadyfollower: 'User already in follow list' });
+          }
+            //add user id in following list
+            profile.followers.unshift({ user: req.user.id });
+            profile.save().then(profile => res.json(profile));
+         })
+        .catch(err => res.status(404).json({profile:'none1 profile exist'}));
 
-      if(profile.followers.filter(followers => followers.user.toString() === req.user.id).length > 0)
-      {
-        return res
-              .status(400)
-              .json({ alreadyfollower: 'User already in follow list' });
-      }
-         //add user id in following list
-         profile.followers.unshift({ user: req.user.id });
-         profile.save().then(profile => res.json(profile));
-        
-     })
+    if(profile.following.filter(following => following.user.toString()===req.params.id).length>0)
+    {
+      return res
+      .status(400)
+      .json({ alreadyfollower: 'User already in following list' });
+    }
+    profile.following.unshift({ user: req.params.id });
+    profile.save().then(profile => res.json(profile)); 
+  }) 
       .catch(err => res.status(404).json({profile:'no profile exist'}));
-       if(profile.following.filter(folowing => following.user.tostring()===req.params.id)>0)
-       {
-        return res
-        .status(400)
-        .json({ alreadyfollower: 'User already in follow list' });
-       }
-       profile.following.unshift({ user: req.params.id });
-       profile.save().then(profile => res.json(profile));
-       
-     })
-     .catch(err => res.status(404).json({profile:'no profile exist'}));
-  }); 
+ });
+     
   
+  
+
+
   // @route   delete api/dashboard/follow/:id
   // @desc    it will delete user id from follower profile and following id from user profile
   // @access  Private
@@ -114,54 +122,53 @@ router.post('/follow/:id',
     const errors = {}; 
      Profile.findOne({user:req.user.id})
      .then(profile => {
-      Profile.findById(req.params.id).then(profile => {
-
-      if(profile.followers.filter(followers => followers.user.toString() === req.user.id).length == 0)
-      {
-      return res
+      Profile.findOne({user:req.params.id}).then(profile => {
+        if(profile.followers.filter(followers => followers.user.toString() === req.user.id).length == 0)
+        {
+            return res
             .status(400)
-            .json({ alreadyfollower: 'User already in follow list' });
-      }
+            .json({ notAfollower: 'User is not in in follower list' });
+        }
       //delete user id in following list
-      const removeIndex = profile.followers.map(item => item._id.toString()).indexOf(req.params.follower_id);
+      const removeIndex = profile.followers.map(item => item.user.toString()).indexOf(req.user.id);
         // Splice follower id out of array  
-         profile.follower.splice(removeIndex, 1);
+         profile.followers.splice(removeIndex, 1);
          profile.save().then(profile => res.json(profile));
       
-  })
-    .catch(err => res.status(404).json({profile:'no profile exist'}));
-    if(profile.following.filter(folowing => following.user.tostring()===req.params.id) == 0)
+      })
+       .catch(err => res.status(404).json({profile:'no profile exist'}));
+    if(profile.following.filter(following => following.user.toString() === req.params.id).length == 0)
     {
       return res
       .status(400)
-      .json({ alreadyfollower: 'User already in follow list' });
+      .json({ notfollowing: 'User is not in following list' });
     }
 
-    const removeIndex = profile.following.map(item => item._id.toString()).indexOf(req.params.following_id);
+    const removeIndex = profile.following.map(item => item.user.toString()).indexOf(req.params.id);
     profile.following.splice(removeIndex, 1);
     profile.save().then(profile => res.json(profile));
     
-  })
-  .catch(err => res.status(404).json({profile:'no profile exist'}));
+    })
+   .catch(err => res.status(404).json({profile:'no profile exist'}));
   }); 
     
 
   // @route   GET api/dashboard/following list
   // @desc     get to user dashboard whos is following
   // @access  Public 
-  router.get('/following',(req,res) =>{
+  router.get('/following/:username',(req,res) =>{
     const errors = {};
-    Profile.find()
+    Profile.findOne({username:req.params.username})
     .then(profile => {
         if(!profile){
             errors.nouser = 'there are no profile list';
             return res.status(404).json(errors);
           }
-        if(!profile.following.user){
+        if(!(profile.following.toString()).length>0){
           errors.nouser = 'there are no user in following list';
           return res.status(404).json(errors);
-        }  
-          res.json(profile.following.user);
+         } 
+         return res.json(profile.following);
     })
     .catch(err => res.status(404).json({profile:'no profile exist'}));
     
@@ -170,19 +177,19 @@ router.post('/follow/:id',
 // @route   GET api/dashboard/follower list
 // @desc     get to user dashboard whos is following
 // @access  Public 
-router.get('/follow',(req,res) =>{
+router.get('/follow/:username',(req,res) =>{
   const errors = {};
-  Profile.find()
+  Profile.findOne({username:req.params.username})
   .then(profile => {
       if(!profile){
           errors.nouser = 'there are no profile exist';
           return res.status(404).json(errors);
         }
-        if(!profile.followers.user){
+        if(!(profile.followers.toString()).length>0){
           errors.nouser = 'there are no user follow list';
           return res.status(404).json(errors);
         }  
-        res.json(profile.followers.user);
+        res.json(profile.followers);
   })
   .catch(err => res.status(404).json({profile:'no profile exist'}));
   
@@ -263,4 +270,4 @@ router.delete(
   }
 );
    
-    module.exports = router;
+ module.exports = router;
