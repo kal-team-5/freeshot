@@ -1,55 +1,137 @@
-const express = require('express');
+const express=require('express');
 const router = express.Router();
-//Add gravatar???
+//const gravatar =require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const keys= require('../../config/keys');
+const passport = require('passport');
 
-//Add user model when done
+//load user model
+const User = require('../../models/User');
+//load input validation
+const validateRegisterInput = require ('../../validation/register');
+const validateLoginInput = require ('../../validation/login');
 
-// @route   POST api/user/register
-// @desc    Register user
-// @access  public
-router.post('/register', (req, res) => {
-    User.findOne({email: req.body.email})
-    .then(user => {
-        if (user) {
-            return res.status(400).json({email: 'Email is in use'});
-        } else {
 
-            //can leave in if we want to implement gravatar or figure out another option
+//router.get('/test',(req,res) => res.json({msg:'users api works'}));
 
-            //   const avatar = gravatar.url(req.body.email, {
-            //       s: '200',
-            //       r: 'pg',
-            //       d: 'mm'
-            //   });
+//@ route Post api/users/register
+//@desc Register user
+//@ access public 
 
-            //Will match keys with ones from the model when it is up
-            const newUser = new User({
-                name: req.body.name,
-                email: req.body.email,
-                password: req.body.password,
-                avatar: ''
-            });
-
-            bcrypt.genSalt(10, (err, salt) => {
+router.post('/register',(req,res) => {
+     const {errors,isValid} = validateRegisterInput(req.body);
+    //check validation
+    if(!isValid){
+        return res.status(400).json(errors);
+    }
+   User.findOne({username: req.body.username})
+   .then(user => {
+       if (user) {
+           errors.username= 'username already exists';
+           return res.status(400).json(errors);
+       } else {
+          /* const avatar = gravatar.url(req.body.email,{
+               s:'200',
+               r:'pg',
+               d:'mm'
+           });*/
+           const newUser = new User({
+               name: req.body.name,
+               username:req.body.username,
+               password:req.body.password
+              // avatar         //avatar:avatar
+           });
+           bcrypt.genSalt(10,(err,salt) => {    //generate a salt(key) after going 10 cycle.
+               if (err){
+                   errors.password = 'failed encrypting';
+                   return res.status(400).json(errors);
+               }
+               bcrypt.hash(newUser.password,salt,(err,hash) => {
                 if (err){
-                    return res.status(400).json({password: 'Failed encrypting'});
+                    errors.password = 'failed hashing';
+                    return res.status(400).json(errors);
                 }
-
-                bcrypt.hash(newUser.password, salt, (err, hash) => {
-                    if (err){
-                        return res.status(400).json({password: 'Failed hashing'});
-                    }
-                    newUser.password = hash;
-                    newUser.save()
-                        .then(user => res.json(user))
-                        .catch(err => console.log(err));
-                })
-            })
-
-        }
-    })
-    .catch(err => console.log(err));
+                newUser.password=hash;
+                newUser.save()
+                 .then(user => res.json(user))
+                 .catch(err => console.log(err));
+               })
+           })
+       }
+   })
+   .catch(err => console.log(err));
 });
+
+//@ route Post api/users/register
+//@desc login user
+//@ access public 
+
+router.post('/login',(req,res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const {errors,isValid} = validateLoginInput(req.body);
+    //check validation
+    if(!isValid){
+        return res.status(400).json(errors);
+    }
+    
+    User.findOne({username})
+     .then(user =>{
+         if(!user){
+             errors.username ='user not found';
+             return res.status(400).json(errors);
+         }
+         //check password
+         bcrypt.compare(password,user.password)
+         .then(isMatch => {
+             if(isMatch){
+                // return res.json({msg:'Success'});
+                //user got matched
+                const payload = {
+                    id: user.id,
+                    name: user.name,
+                    username: user.username
+                    
+                };
+                //sign token
+                jwt.sign(payload, keys.secretOrKey,{expiresIn:3600 },
+                    (err,token) => {
+                        return res.json({
+                            success:true,
+                            token:'Bearer ' + token
+                        });
+                    }
+                    )
+                  // return res.json({token});
+             }
+             else {
+                errors.password = 'password incorrect';
+                return res.status(400).json(errors);
+             }
+             
+         });
+     })
+     .catch(err => console.log(err));
+});
+
+//@ route get api/users/current
+//@desc returns current user information
+//@ access private
+
+router.get(
+'/current', 
+passport.authenticate('jwt',{session:false}),
+(req,res) => {
+    res.json({
+        id: req.user.id,
+        name:req.user.name,
+        username:req.user.username
+
+    });
+
+}
+)
 
 module.exports = router;
