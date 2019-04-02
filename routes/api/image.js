@@ -19,13 +19,13 @@ ImageRouter.get("/", (req, res) => {
     .sort({ date: -1 })
     .then(images => {
       if (images.length == 0) {
-        return res.status(200).json({ nopostsfound: "No posts found" });
+        return res.status(200).json({ noimagesfound: "No Images found" });
       }
       res.json(images);
     })
     .catch(err => {
       console.log(err);
-      res.status(404).json({ nopostsfound: "No posts found" });
+      res.status(404).json({ noimagesfound: "No Images found" });
     });
 });
 
@@ -36,7 +36,7 @@ ImageRouter.get("/:id", (req, res) => {
   ImageModel.findById(req.params.id)
     .then(image => res.json(image))
     .catch(err =>
-      res.status(404).json({ nopostfound: "No post found with that ID" })
+      res.status(404).json({ noimagesfound: "No Images found with that ID" })
     );
 });
 
@@ -57,8 +57,8 @@ ImageRouter.post(
       user: req.user.id,
       url: req.body.url,
       caption: req.body.caption,
-      username: req.body.username,
-      avatar: req.body.avatar
+      username: req.body.username
+      //avatar: req.body.avatar
     });
     newImagePost
       .save()
@@ -89,7 +89,7 @@ ImageRouter.delete(
           // Delete
           image.remove().then(() => res.json({ success: true }));
         })
-        .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+        .catch(err => res.status(404).json({ imagenotfound: "No Image found" }));
     });
   }
 );
@@ -114,7 +114,7 @@ ImageRouter.post(
         const newComment = {
           text: req.body.text,
           username: req.body.username,
-          avatar: req.body.avatar,
+          //avatar: req.body.avatar,
           user: req.user.id
         };
 
@@ -126,7 +126,7 @@ ImageRouter.post(
       })
       .catch(err => {
         console.log(err);
-        res.status(404).json({ postnotfound: "No post found" });
+        res.status(404).json({ imagenotfound: "No Images found" });
       });
   }
 );
@@ -161,7 +161,7 @@ ImageRouter.delete(
 
         image.save().then(image => res.json(image));
       })
-      .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+      .catch(err => res.status(404).json({ imagenotfound: "No Image found" }));
   }
 );
 
