@@ -112,10 +112,10 @@ router.post('/follow/:id',
   
 
 
-  // @route   delete api/dashboard/follow/:id
+  // @route   delete api/dashboard/unfollow/:id
   // @desc    it will delete user id from follower profile and following id from user profile
   // @access  Private
-  router.delete('/follow/:id',
+  router.delete('/unfollow/:id',
     passport.authenticate('jwt', { session: false }),
     (req,res) => {
 
