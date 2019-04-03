@@ -15,7 +15,7 @@ const Profile = require('../../models/Profile');
 // Load Validation
 const validateProfileInput = require('../../validation/profile');
 
-// @route   GET api/dashboard
+// @route   GET freeshot/dashboard
 // @desc    Get current user
 // @access  Private
 router.get('/',
@@ -35,7 +35,7 @@ router.get('/',
 }
 )
 
-// @route   GET api/dashboard/username/:username (search bar)
+// @route   GET freeshot/dashboard/username/:username (search bar)
 // @desc    Get dashboard by username
 // @access  Public 
 
@@ -55,7 +55,7 @@ router.get('/:username', (req,res) => {
 
 });
 
-// @route   GET api/profile/explore  (means all profile)
+// @route   GET freeshot/profile/explore  (means all profile)
 // @desc    Get all profiles
 // @access  Public
 router.get('/explore', (req, res) => {
@@ -74,7 +74,7 @@ router.get('/explore', (req, res) => {
     .catch(err => res.status(404).json({ profile: 'There are no profiles' }));
 });
 
-// @route   post api/dashboard/follow/:id
+// @route   post freeshot/dashboard/follow/:id
 // @desc    it will add user id in folowers profile and profile id in user following list
 // @access  Private
 router.post('/follow/:id',
@@ -112,7 +112,7 @@ router.post('/follow/:id',
   
 
 
-  // @route   delete api/dashboard/unfollow/:id
+  // @route   delete freeshot/dashboard/unfollow/:id
   // @desc    it will delete user id from follower profile and following id from user profile
   // @access  Private
   router.delete('/unfollow/:id',
@@ -153,7 +153,7 @@ router.post('/follow/:id',
   }); 
     
 
-  // @route   GET api/dashboard/following list
+  // @route   GET freeshot/dashboard/following list
   // @desc     get to user dashboard whos is following
   // @access  Public 
   router.get('/following/:username',(req,res) =>{
@@ -174,7 +174,7 @@ router.post('/follow/:id',
     
   });
 
-// @route   GET api/dashboard/follower list
+// @route   GET freeshot/dashboard/follower list
 // @desc     get to user dashboard whos is following
 // @access  Public 
 router.get('/follow/:username',(req,res) =>{
@@ -196,7 +196,7 @@ router.get('/follow/:username',(req,res) =>{
 });
 
 
-// @route   Dashboard api/dashboard
+// @route   Dashboard freeshot/dashboard
 // @desc    Create or edit user profile
 // @access  Private
 
@@ -255,7 +255,7 @@ router.post('/',
     });
 
 
- // @route   DELETE api/profile
+ // @route   DELETE freeshot/profile
 // @desc    Delete user and profile
 // @access  Private
 router.delete(
