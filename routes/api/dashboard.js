@@ -135,7 +135,7 @@ router.post(
         profile.following.unshift({ user: req.params.id });
         profile.save().then(profile => res.json(profile));
       })
-      .catch(err => res.status(404).json({ profile: "no profile exist" }));
+      //.catch(err => res.status(404).json({ profile: "no profile exist" })); //catch statement without promise causing error.
  
   // @route   GET freeshot/dashboard/following list
   // @desc     get to user dashboard whos is following
@@ -224,10 +224,6 @@ router.get("/follow/:username", (req, res) => {
     .catch(err => res.status(404).json({ profile: "no profile exist" }));
 });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 // @route   Dashboard freeshot/dashboard
 // @desc    Create or edit user profile
 // @access  Private
