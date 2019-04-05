@@ -7,7 +7,7 @@ module.exports = function validateRegisterInput(data){
     data.name = !isEmpty(data.name) ? data.name : '';
     data.username = !isEmpty(data.username) ? data.username : '';
     data.password = !isEmpty(data.password) ? data.password : '';
-    data.password2 = !isEmpty(data.password) ? data.password2 : ''; // this is not in model but need it in UI
+    data.password2 = !isEmpty(data.password2) ? data.password2 : ''; // this is not in model but need it in UI
 
     if (!validator.isLength(data.name,{min : 2,max:30})){
         errors.name = 'Name must be between 2 and 30 characters';
