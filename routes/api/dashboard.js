@@ -195,7 +195,6 @@ router.get('/follow/:username',(req,res) =>{
   
 });
 
-
 // @route   Dashboard freeshot/dashboard
 // @desc    Create or edit user profile
 // @access  Private
