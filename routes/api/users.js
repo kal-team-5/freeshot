@@ -15,7 +15,7 @@ const validateLoginInput = require ('../../validation/login');
 
 //router.get('/test',(req,res) => res.json({msg:'users api works'}));
 
-//@ route Post freeshot/users/register
+//@ route Post api/users/register
 //@desc Register user
 //@ access public 
 
@@ -63,7 +63,7 @@ router.post('/register',(req,res) => {
    .catch(err => console.log(err));
 });
 
-//@ route Post freeshot/users/register
+//@ route Post api/users/register
 //@desc login user
 //@ access public 
 
@@ -116,7 +116,7 @@ router.post('/login',(req,res) => {
      .catch(err => console.log(err));
 });
 
-//@ route get freeshot/users/current
+//@ route get api/users/current
 //@desc returns current user information
 //@ access private
 
