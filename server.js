@@ -8,7 +8,7 @@ const db = require('./config/keys').mongoURI;
 const users = require('./routes/api/users');
 
 //routing
-const imageRouter = require("./routes/api/image");
+const imageRouter = require("./routes/api/image-router");
 const dashboard = require('./routes/api/dashboard');
 
 
@@ -31,10 +31,10 @@ require('./config/passport')(passport);
 app.get("/", (req, res) => res.send("Welcome to FreeShot Middleware"));
 
 //first route
-app.use('/freeshot/users',users);
+app.use('/freeshot/user',users);
 app.use('/freeshot/dashboard',dashboard);
 //Configure routes
-app.use("/freeshot/dashboard/image", imageRouter);
+app.use("/freeshot/image", imageRouter);
 
 const port = process.env.PORT || 5300;
 app.listen(port,() => console.log(`server running on port ${port}`));
