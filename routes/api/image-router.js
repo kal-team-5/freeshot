@@ -165,4 +165,64 @@ ImageRouter.delete(
   }
 );
 
+// @route POST freeshot/image/like/:id
+// @desc Like the image post
+// @access Private
+
+router.post(
+  '/like/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      ImageModel.findById(req.params.id)
+      .then(image => {
+        if (image.likes.filter(like => like.user.toString() === req.user.id).length > 0
+        ) {
+          return res.status(400).json({ alreadyliked: 'You have already liked the image'});
+        }
+
+        // Adds user id to likes array
+        image.likes.unshift({ user: req.user.id });
+        // Saves like
+        image.save().then(image => res.json(image));
+      })
+      .catch(err => res.status(404).json({ imagenotfound: 'No image post found' }));
+    });
+  }
+);
+
+// @route POST freeshot/image/unlike/:id
+// @desc Unlikes the image post
+// @access Private
+
+router.post(
+  '/unlike/:id',
+  passport.authenticate('jwt', {session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      ImageModel.findById(req.params.id)
+      .then(image => {
+        if (
+          image.likes.filter(like => like.user.toString() === req.user.id).length === 0
+        ) {
+          return res
+            .status(400)
+            .json({ notliked: 'You have not liked this image'});
+        }
+
+        // Get remove index
+        const removeIndex = ImageModel.likes
+        .map(item => item.user.toString())
+        .indexOf(req.user.id);
+
+        //Splice likes array
+        image.likes.splice(removeIndex, 1);
+        // Save
+        image.save().then(image => res.json(image));
+      })
+      .catch(err => res.status(404).json({ imagenotfound: 'No image post found' }));
+    });
+  }
+);
+
 module.exports = ImageRouter;
