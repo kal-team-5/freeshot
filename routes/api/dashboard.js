@@ -99,10 +99,29 @@ router.post(
             //add user id in following list
             profile.followers.unshift({ user: req.user.id });
             profile.save().then(profile => res.json(profile));
-          })
-          .catch(err =>
-            res.status(404).json({ profile: "none1 profile exist" })
-          );
+         })
+        .catch(err => res.status(404).json({profile:'none1 profile exist'}));
+
+    if(profile.following.filter(following => following.user.toString()===req.params.id).length>0)
+    {
+      return res
+      .status(400)
+      .json({ alreadyfollower: 'User already in following list' });
+    }
+    profile.following.unshift({ user: req.params.id });
+    profile.save().then(profile => res.json(profile)); 
+  }) 
+      .catch(err => res.status(404).json({profile:'no profile exist'}));
+ });
+     
+  
+  
+  // @route   delete freeshot/dashboard/unfollow/:id
+  // @desc    it will delete user id from follower profile and following id from user profile
+  // @access  Private
+  router.delete('/unfollow/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req,res) => {
 
         if (
           profile.following.filter(
@@ -117,16 +136,11 @@ router.post(
         profile.save().then(profile => res.json(profile));
       })
       .catch(err => res.status(404).json({ profile: "no profile exist" }));
-  }
-);
-
-// @route   delete freeshot/dashboard/follow/:id
-// @desc    it will delete user id from follower profile and following id from user profile
-// @access  Private
-router.delete(
-  "/follow/:id",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
+ 
+  // @route   GET freeshot/dashboard/following list
+  // @desc     get to user dashboard whos is following
+  // @access  Public 
+  router.get('/following/:username',(req,res) =>{
     const errors = {};
     Profile.findOne({ user: req.user.id })
       .then(profile => {
@@ -210,6 +224,10 @@ router.get("/follow/:username", (req, res) => {
     .catch(err => res.status(404).json({ profile: "no profile exist" }));
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 // @route   Dashboard freeshot/dashboard
 // @desc    Create or edit user profile
 // @access  Private
@@ -268,7 +286,7 @@ router.post(
   }
 );
 
-// @route   DELETE freeshot/profile
+ // @route   DELETE freeshot/profile
 // @desc    Delete user and profile
 // @access  Private
 router.delete(
