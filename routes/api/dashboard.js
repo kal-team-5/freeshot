@@ -39,14 +39,15 @@ router.get('/',
 // @desc    Get dashboard by username
 // @access  Public 
 
-router.get('/:username', (req,res) => {
+router.get('/username/:username', (req,res) => {
  const errors = {};
 
   Profile.findOne({username:req.params.username})
   .populate('user', ['name'])
   .then(profile => {
     if(!profile){
-        errors.nouser = 'There is no user exist of this username ';
+        //errors.nouser = 'There is no user exist of this username ';
+        errors.noprofile = 'There is no profile for the user';
         return res.status(404).json(errors);
     }
     res.json(profile)
@@ -55,10 +56,10 @@ router.get('/:username', (req,res) => {
 
 });
 
-// @route   GET freeshot/profile/explore  (means all profile)
+// @route   GET freeshot/dashboard/profile/explore  (means all profile)
 // @desc    Get all profiles
 // @access  Public
-router.get('/explore', (req, res) => {
+router.get('/profile/explore', (req, res) => {
   const errors = {};
 
   Profile.find()
@@ -94,7 +95,7 @@ router.post('/follow/:id',
             profile.followers.unshift({ user: req.user.id });
             profile.save().then(profile => res.json(profile));
          })
-        .catch(err => res.status(404).json({profile:'none1 profile exist'}));
+        .catch(err => res.status(404).json({profile:'none profile exist'}));
 
     if(profile.following.filter(following => following.user.toString()===req.params.id).length>0)
     {
@@ -177,7 +178,7 @@ router.post('/follow/:id',
 // @route   GET freeshot/dashboard/follower list
 // @desc     get to user dashboard whos is following
 // @access  Public 
-router.get('/follow/:username',(req,res) =>{
+router.get('/follower/:username',(req,res) =>{
   const errors = {};
   Profile.findOne({username:req.params.username})
   .then(profile => {
@@ -254,11 +255,11 @@ router.post('/',
     });
 
 
- // @route   DELETE freeshot/profile
+ // @route   DELETE freeshot/dashboard/profile
 // @desc    Delete user and profile
 // @access  Private
 router.delete(
-  '/',
+  '/profile',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Profile.findOneAndRemove({ user: req.user.id }).then(() => {
