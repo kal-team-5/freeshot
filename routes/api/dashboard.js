@@ -56,10 +56,10 @@ router.get('/username/:username', (req,res) => {
 
 });
 
-// @route   GET freeshot/dashboard/profile/explore  (means all profile)
+// @route   GET freeshot/dashboard/explore  (means all profile)
 // @desc    Get all profiles
 // @access  Public
-router.get('/profile/explore', (req, res) => {
+router.get('/explore', (req, res) => {
   const errors = {};
 
   Profile.find()
@@ -259,7 +259,7 @@ router.post('/',
 // @desc    Delete user and profile
 // @access  Private
 router.delete(
-  '/profile',
+  '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Profile.findOneAndRemove({ user: req.user.id }).then(() => {
