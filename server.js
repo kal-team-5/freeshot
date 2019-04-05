@@ -34,7 +34,7 @@ app.get("/", (req, res) => res.send("Welcome to FreeShot Middleware"));
 app.use('/freeshot/users',users);
 app.use('/freeshot/dashboard',dashboard);
 //Configure routes
-app.use("/freeshot/image", imageRouter);
+app.use("/freeshot/dashboard/image", imageRouter);
 
 const port = process.env.PORT || 5300;
 app.listen(port,() => console.log(`server running on port ${port}`));

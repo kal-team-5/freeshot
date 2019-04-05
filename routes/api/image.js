@@ -11,7 +11,7 @@ const ImageModel = require("../../models/Image");
 const validateImageInput = require("../../validation/image-upload-validator");
 const validateComments = require("../../validation/add-comments-validator");
 
-// @route   GET freeshot/image
+// @route   GET freeshot/dashboard/image
 // @desc    Get Image Posts
 // @access  Public
 ImageRouter.get("/", (req, res) => {
@@ -29,7 +29,7 @@ ImageRouter.get("/", (req, res) => {
     });
 });
 
-// @route   GET freeshot/image/:id
+// @route   GET freeshot/dashboard/image/:id
 // @desc    Get Iamge Post by id
 // @access  Public
 ImageRouter.get("/:id", (req, res) => {
@@ -40,7 +40,7 @@ ImageRouter.get("/:id", (req, res) => {
     );
 });
 
-//@route POST freeshot/image/upload
+//@route POST freeshot/dashboard/image/upload
 //@desc Post Images upload
 //@access Private
 ImageRouter.post(
@@ -69,11 +69,11 @@ ImageRouter.post(
   }
 );
 
-// @route   DELETE freeshot/image/upload/:id
+// @route   DELETE freeshot/dashboard/image/:id
 // @desc    Delete Image post
 // @access  Private
 ImageRouter.delete(
-  "/upload/:id",
+  "/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Profile.findOne({ user: req.user.id }).then(profile => {
@@ -89,12 +89,14 @@ ImageRouter.delete(
           // Delete
           image.remove().then(() => res.json({ success: true }));
         })
-        .catch(err => res.status(404).json({ imagenotfound: "No Image found" }));
+        .catch(err =>
+          res.status(404).json({ imagenotfound: "No Image found" })
+        );
     });
   }
 );
 
-// @route   POST freeshot/image/comment/:id
+// @route   POST freeshot/dashboard/image/comment/:id
 // @desc    Add comment to Image Post
 // @access  Private
 ImageRouter.post(
@@ -131,7 +133,7 @@ ImageRouter.post(
   }
 );
 
-// @route   DELETE freeshot/image/comment/:id/:comment_id
+// @route   DELETE freeshot/dashboard/image/comment/:id/:comment_id
 // @desc    Remove comment from Image Post
 // @access  Private
 ImageRouter.delete(
