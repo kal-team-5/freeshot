@@ -35,8 +35,8 @@ router.get('/',
 }
 )
 
-// @route   GET freeshot/dashboard/username/:username (search bar)
-// @desc    Get dashboard by username
+// @route   GET freeshot/dashboard/username/:username 
+// @desc    Get dashboard by username (search bar)
 // @access  Public 
 
 router.get('/username/:username', (req,res) => {
@@ -154,8 +154,8 @@ router.post('/follow/:id',
   }); 
     
 
-  // @route   GET freeshot/dashboard/following list
-  // @desc     get to user dashboard whos is following
+  // @route   GET freeshot/dashboard/following/:username
+  // @desc     get to user dashboard who is following
   // @access  Public 
   router.get('/following/:username',(req,res) =>{
     const errors = {};
@@ -175,7 +175,7 @@ router.post('/follow/:id',
     
   });
 
-// @route   GET freeshot/dashboard/follower list
+// @route   GET freeshot/dashboard/follower/:username
 // @desc     get to user dashboard whos is following
 // @access  Public 
 router.get('/follower/:username',(req,res) =>{
@@ -255,7 +255,7 @@ router.post('/',
     });
 
 
- // @route   DELETE freeshot/dashboard/profile
+ // @route   DELETE freeshot/dashboard
 // @desc    Delete user and profile
 // @access  Private
 router.delete(
