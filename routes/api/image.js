@@ -171,7 +171,7 @@ ImageRouter.delete(
 // @desc Like the image post
 // @access Private
 
-router.post(
+ImageRouter.post(
   '/like/:id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
@@ -197,7 +197,7 @@ router.post(
 // @desc Unlikes the image post
 // @access Private
 
-router.post(
+ImageRouter.post(
   '/unlike/:id',
   passport.authenticate('jwt', {session: false }),
   (req, res) => {
