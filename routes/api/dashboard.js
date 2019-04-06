@@ -35,8 +35,8 @@ router.get('/',
 }
 )
 
-// @route   GET freeshot/dashboard/username/:username (search bar)
-// @desc    Get dashboard by username
+// @route   GET freeshot/dashboard/username/:username 
+// @desc    Get dashboard by username (search bar)
 // @access  Public 
 
 router.get('/username/:username', (req,res) => {
@@ -55,6 +55,7 @@ router.get('/username/:username', (req,res) => {
   .catch(err => res.status(404).json(err))
 
 });
+
 
 // @route   GET freeshot/dashboard/profile/explore  (means all profile)
 // @desc    Get all profiles
@@ -154,8 +155,8 @@ router.post('/follow/:id',
   }); 
     
 
-  // @route   GET freeshot/dashboard/following list
-  // @desc     get to user dashboard whos is following
+  // @route   GET freeshot/dashboard/following/:username
+  // @desc     get to user dashboard who is following
   // @access  Public 
   router.get('/following/:username',(req,res) =>{
     const errors = {};
@@ -175,7 +176,7 @@ router.post('/follow/:id',
     
   });
 
-// @route   GET freeshot/dashboard/follower list
+// @route   GET freeshot/dashboard/follower/:username
 // @desc     get to user dashboard whos is following
 // @access  Public 
 router.get('/follower/:username',(req,res) =>{
