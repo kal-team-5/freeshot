@@ -167,7 +167,7 @@ ImageRouter.delete(
   }
 );
 
-// @route POST freeshot/image/like/:id
+// @route POST freeshot/dashboard/image/like/:id
 // @desc Like the image post
 // @access Private
 
@@ -193,7 +193,7 @@ router.post(
   }
 );
 
-// @route POST freeshot/image/unlike/:id
+// @route POST freeshot/dashboard/image/unlike/:id
 // @desc Unlikes the image post
 // @access Private
 
