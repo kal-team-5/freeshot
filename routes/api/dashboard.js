@@ -156,7 +156,7 @@ router.post('/follow/:id',
     profile.save().then(profile => res.json(profile));
     
     })
-   .catch(err => res.status(404).json({profile:'no profile exist'}));
+     .catch(err => res.status(404).json({profile:'no profile exist'}));
   }); 
     
 
