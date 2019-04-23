@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/authActions';
 import classnames from 'classnames';
 
  class Login extends Component {
@@ -21,13 +24,33 @@ import classnames from 'classnames';
     onSubmit(e){
       e.preventDefault();
       const user = {
-        email : this.state.email,
+        name : this.state.name,
+       username : this.state.username,
         password : this.state.password
         
       };
+      this.props.loginUser(user);
     }  
+    componentDidMount(){
+        if(this.props.auth.isAuthenticated){
+          this.props.history.push('/dashboard');
+        }
+      }
+     
+      componentWillReceiveProps(nextProps){  //new set of props
+       console.log("ccc" + nextProps); 
+       if (nextProps.auth.isAuthenticated){
+          this.props.history.push('/dashboard');
+        }
+      
+       if (nextProps.errors){
+          this.setState({errors:nextProps.errors});
+       }
+     }
   render() {
-    const {errors} = this.state;
+    const {errors} = this.state;  //value from store (errors = this.state.errors)
+     const {user} = this.props.auth //value from store  (user = this.props.auth)
+
     return (
         <div className="login">
           <div className="container">
@@ -37,13 +60,13 @@ import classnames from 'classnames';
                 <p className="lead text-center">Sign in to your Freeshot account</p>
                 <form noValidate onSubmit={this.onSubmit}>
                   <div className="form-group">
-                    <input type="name" className={classnames('form-control form-control-lg',{'is-invalid':errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
+                    <input type="text" className={classnames('form-control form-control-lg',{'is-invalid':errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
                     {errors.name && (<div className="invalid-feedback">
                          {errors.name} </div>
                        )}
                   </div>
                   <div className="form-group">
-                    <input type="name" className={classnames('form-control form-control-lg',{'is-invalid':errors.username})} placeholder="Username" name="username" value={this.state.email} onChange={this.onChange} />
+                    <input type="text" className={classnames('form-control form-control-lg',{'is-invalid':errors.username})} placeholder="Username" name="username" value={this.state.username} onChange={this.onChange} />
                     {errors.username && (<div className="invalid-feedback">
                          {errors.username} </div>
                        )}
@@ -66,4 +89,17 @@ import classnames from 'classnames';
       }
    
 
-export default Login;
+      Login.propTypes = {
+        loginUser:PropTypes.func.isRequired,
+         auth:PropTypes.object.isRequired,
+         errors:PropTypes.object.isRequired
+       }
+       
+       const mapStateToProps = (state)  => ({
+          auth: state.auth,
+          errors:state.errors
+       
+       
+       });
+        export default connect(mapStateToProps, {loginUser})(Login);
+       

@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from 'react'
 import classnames from 'classnames';
-
+import {connect} from 'react-redux';
+import {registerUser} from '../../actions/authActions';
+import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
 
 
  class Register extends Component {
@@ -33,13 +35,27 @@ import classnames from 'classnames';
    
        };
 
-       axios.post('/freeshot/users/register',newUser)
-       .then(res => console.log(res.data))
-       .catch(err => this.setState({errors:err.response.data}));
+      // axios.post('/freeshot/users/register',newUser)
+      // .then(res => console.log(res.data))
+      // .catch(err => this.setState({errors:err.response.data}));
+
+      this.props.registerUser(newUser,this.props.history);  // history to push to login react history property
     }  
+    componentDidMount(){
+        if(this.props.auth.isAuthenticated){
+          this.props.history.push('/dashboard'); //history.push is used to push to dashboard
+        }
+      }
+    
+       componentWillReceiveProps(nextProps){ 
+         if (nextProps.errors){
+           this.setState({errors:nextProps.errors})   //to set the errors made by user while entering the details 
+         }
+       }
     
   render() {
       const {errors} = this.state;
+      const {user} = this.props.auth
     return (
         <div className="register">
         <div className="container">
@@ -92,4 +108,17 @@ import classnames from 'classnames';
   }
 }
 
-export default Register;
+Register.propTypes = {
+    registerUser:PropTypes.func.isRequired,
+    auth:PropTypes.object.isRequired,
+    errors:PropTypes.object.isRequired
+  }
+  
+  const mapStateToProps = (state)  => ({
+     auth: state.auth,
+     errors:state.errors
+  
+  
+  });
+  //export default Register;
+  export default connect(mapStateToProps,{registerUser})(withRouter(Register)); //map dispatch to props

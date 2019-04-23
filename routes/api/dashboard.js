@@ -23,7 +23,7 @@ router.get('/',
   (req,res) =>{
     const errors = {}; 
     Profile.findOne({user: req.user.id})
-    .populate('user', ['name'])
+    //.populate('user', ['name'])
     .then(profile => {
       if (!profile){
          errors.noprofile = 'There is no profile for this user';
@@ -43,7 +43,7 @@ router.get('/username/:username', (req,res) => {
  const errors = {};
 
   Profile.findOne({username:req.params.username})
-  .populate('user', ['name'])
+  
   .then(profile => {
     if(!profile){
         //errors.nouser = 'There is no user exist of this username ';
@@ -64,7 +64,6 @@ router.get('/profile/explore', (req, res) => {
   const errors = {};
 
   Profile.find()
-    .populate('user', ['name'])
     .then(profiles => {
       if (!profiles) {
         errors.noprofile = 'There are no profiles';
@@ -76,6 +75,7 @@ router.get('/profile/explore', (req, res) => {
     .catch(err => res.status(404).json({ profile: 'There are no profiles' }));
 });
 
+
 // @route   post freeshot/dashboard/follow/:id
 // @desc    it will add user id in folowers profile and profile id in user following list
 // @access  Private
@@ -86,6 +86,11 @@ router.post('/follow/:id',
     const errors = {}; 
     Profile.findOne({user:req.user.id})
       .then(profile => {
+        const followInfo = {
+          name: profile.name,
+          username: profile.username,
+          user: req.user.id
+        };
            Profile.findOne({user : req.params.id})
            .then(profile => {
             if(profile.followers.filter(followers => followers.user.toString()===req.user.id).length>0)
@@ -93,29 +98,81 @@ router.post('/follow/:id',
             return res.json(400).json({ alreadyfollower: 'User already in follow list' });
           }
             //add user id in following list
-            profile.followers.unshift({ user: req.user.id });
+            profile.followers.unshift(followInfo);
             profile.save().then(profile => res.json(profile));
          })
-        .catch(err => {console.log(err);
-          res.status(404).json({profile:'none profile exist'});
-        });
+     //   .catch(err => {console.log(err);
+     //     res.status(404).json({profile:'none profile exist'});
+    //    });
 
     if(profile.following.filter(following => following.user.toString()===req.params.id).length>0)
     {
       return res
       .status(400)
-      .json({ alreadyfollower: 'User already in following list' });
+      .json({ alreadyfollowing: 'User already in following list' });
     }
-    profile.following.unshift({ user: req.params.id });
+    const followinInfo = {
+      name: req.body.name,
+      username: req.body.username,
+      user: req.params.id
+    };
+
+    profile.following.unshift(followinInfo);
     profile.save().then(profile => res.json(profile)); 
   }) 
       .catch(err => {
         console.log(err);
         res.status(404).json({profile:'no profile exist'});
-      });
+     });
  });
      
+  // @route   post freeshot/dashboard/followers
+// @desc    GET followers list
+// @access  Private
+router.get('/followers',
+passport.authenticate('jwt', { session: false }),
+(req,res) => {
+const errors = {}; 
+Profile.findOne({user:req.user.id})
+.then(profile => {
+      // console.log(username);
+       if(!profile.followers.toString().length>0)
+      {
+        return res.json(400).json({ nofollower: ' No User follower list' });
+      }
+        //add user id in following list
+        //profile.followers[0].populate('user',[username]);
+        res.json(profile.followers);
+        
+     })
+    .catch(err => {console.log(err);
+      res.status(404).json({profile:'none profile exist'});
+    })
+  });
   
+
+
+  // @route   post freeshot/dashboard/following
+// @desc    GET following list
+// @access  Private
+router.get('/following',
+passport.authenticate('jwt', { session: false }),
+(req,res) => {
+const errors = {}; 
+Profile.findOne({user:req.user.id})
+.then(profile => {
+       if(!profile.following.length>0)
+      {
+        return res.json(400).json({ nofollower: ' No User follower list' });
+      }
+        //add user id in following list
+        res.json(profile.following);
+        //console.log(profile.following[0].user.username);
+     })
+    .catch(err => {console.log(err);
+      res.status(404).json({profile:'none profile exist'});
+    });
+  });
   
 
 
@@ -143,7 +200,7 @@ router.post('/follow/:id',
          profile.save().then(profile => res.json(profile));
       
       })
-       .catch(err => res.status(404).json({profile:'no profile exist'}));
+      // .catch(err => res.status(404).json({profile:'no profile exist'}));
     if(profile.following.filter(following => following.user.toString() === req.params.id).length == 0)
     {
       return res
