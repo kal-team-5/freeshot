@@ -8,18 +8,23 @@ class Followers extends Component {
   
 
   render() {
-    //console.log("edu" + this.props.followers.fl._id);
-    const followers = this.props.followers.map(fl => (
-      <tr key={fl._id}>
-        <td>{fl.username}</td>
-     </tr>
-    ));
+    let followers;
+      if(this.props.followers.length>0){
+          followers = this.props.followers.map(fl => (
+            <tr key={fl.user}>
+              <td>{fl.username}</td>
+          </tr>
+          ));
+       }
+     else{
+      followers = <h4>Currently follower list is empty...</h4>;
+   } 
     return (
       <div>
-      <button className="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+      <button className="btn-group btn btn-light" data-toggle="modal" data-target="#myModal">
           Followers
       </button>
-     <div className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
@@ -30,6 +35,7 @@ class Followers extends Component {
           <div className="modal-body">
             {followers}
           </div>
+          
           
         </div>
       </div>

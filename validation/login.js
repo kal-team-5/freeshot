@@ -7,14 +7,12 @@ module.exports = function validateLoginInput(data){
 
     let errors = {};
 
-    data.name = !isEmpty(data.name) ? data.name : '';
+    
     data.username = !isEmpty(data.username) ? data.username : '';
     data.password = !isEmpty(data.password) ? data.password : '';
    
 
-    if(validator.isEmpty(data.name)) {
-        errors.username ='name field is required';
-    }
+   
    
     if(validator.isEmpty(data.username)) {
         errors.username ='username field is required';

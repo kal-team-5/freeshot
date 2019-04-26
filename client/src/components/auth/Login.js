@@ -8,7 +8,7 @@ import classnames from 'classnames';
     constructor(){
         super();
         this.state={
-          name:'',
+          
           username:'',
           password:'',
           errors:{}
@@ -24,7 +24,7 @@ import classnames from 'classnames';
     onSubmit(e){
       e.preventDefault();
       const user = {
-        name : this.state.name,
+       
        username : this.state.username,
         password : this.state.password
         
@@ -59,12 +59,7 @@ import classnames from 'classnames';
                 <h1 className="display-4 text-center">Log In</h1>
                 <p className="lead text-center">Sign in to your Freeshot account</p>
                 <form noValidate onSubmit={this.onSubmit}>
-                  <div className="form-group">
-                    <input type="text" className={classnames('form-control form-control-lg',{'is-invalid':errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
-                    {errors.name && (<div className="invalid-feedback">
-                         {errors.name} </div>
-                       )}
-                  </div>
+                  
                   <div className="form-group">
                     <input type="text" className={classnames('form-control form-control-lg',{'is-invalid':errors.username})} placeholder="Username" name="username" value={this.state.username} onChange={this.onChange} />
                     {errors.username && (<div className="invalid-feedback">

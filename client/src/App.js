@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import Profiles from './components/profiles/Profiles';
+import EditProfile from './components/edit-profile/EditProfile';
 import Profile from './components/profile/Profile';
 import PrivateRoute from './components/common/PrivateRoute';
 import {Provider} from 'react-redux';
@@ -14,6 +15,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import store from './store';
 import Dashboard from './components/dashboard/Dashboard';
+import SearchProfile from './components/search/SearchProfile';
  
 import './App.css';
 
@@ -54,10 +56,14 @@ class App extends Component {
               <Route exact path="/login" component={Login}/>
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:username" component={Profile} />
-              
+              <Route exact path="/search/:username" component={SearchProfile} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
+              
+              <Switch>
+                <PrivateRoute exact path="/edit-profile" component={EditProfile} />
+                </Switch>   
               
           </div>
         <Footer />

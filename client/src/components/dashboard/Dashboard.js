@@ -42,25 +42,32 @@ import DashboardActions from './DashboardActions';
         if(Object.keys(profile).length>0){
             dashboardContent = (
                 <div>
-                 <p className="lead text-muted">Welcome {user.username}</p>
-                 <div className="btn-group mb-4" role="group">
-                  <Link to="/edit-profile" className="btn btn-light">
-                    <i className="fas fa-user-circle text-info mr-1" /> Edit Profile
-                  </Link>
-                 </div>
-                 <div className="col-mb-4">
-                 <Followers followers={profile.followers} />
-                 </div>
+                 <div className="container">
+                 <div className="row">
+                  <div className="lead text-muted col-mb-2">Welcome {user.username}</div>
+                     <div className="btn-group  col-mb-4" role="group">
+                      <Link to="/edit-profile" className="btn btn-light">
+                        <i className="fas fa-user-circle text-info mr-1" /> Edit Profile
+                      </Link>
+                      </div>
+                    </div>  
+                    <div className="row">
+                        <div className="col-mb-2">
+                         <Followers followers={profile.followers} />
+                         </div>
+                         <div className="col-mb-4">
+                         <Following following={profile.following} /> 
+                         </div>
+                        </div> 
+                   </div>
+                  
                    
-                 
-                 
-                 <Following following={profile.following} />
-                 <div style={{ marginBottom: '60px' }} />
-                 <p className="lead text-muted">{user.name}</p>
-                 <button onClick={this.onDeleteClick.bind(this)} className="btn btn-danger">
-                    Delete My Account
-                 </button>  
-                </div>
+                  <div style={{ marginBottom: '60px' }} />
+                      <p className="lead text-muted">{user.name}</p>
+                      <button onClick={this.onDeleteClick.bind(this)} className="btn btn-danger">
+                        Delete My Account
+                      </button>  
+                  </div>
             );
         } 
     }

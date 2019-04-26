@@ -79,7 +79,7 @@ router.get('/profile/explore', (req, res) => {
 // @route   post freeshot/dashboard/follow/:id
 // @desc    it will add user id in folowers profile and profile id in user following list
 // @access  Private
-router.post('/follow/:id',
+router.post('/follow/:id,:name,:username',
     passport.authenticate('jwt', { session: false }),
     (req,res) => {
   
@@ -101,9 +101,9 @@ router.post('/follow/:id',
             profile.followers.unshift(followInfo);
             profile.save().then(profile => res.json(profile));
          })
-     //   .catch(err => {console.log(err);
-     //     res.status(404).json({profile:'none profile exist'});
-    //    });
+       .catch(err => {console.log(err);
+         res.status(404).json({profile:'none profile exist'});
+       });
 
     if(profile.following.filter(following => following.user.toString()===req.params.id).length>0)
     {
@@ -112,8 +112,8 @@ router.post('/follow/:id',
       .json({ alreadyfollowing: 'User already in following list' });
     }
     const followinInfo = {
-      name: req.body.name,
-      username: req.body.username,
+      name: req.params.name,
+      username: req.params.username,
       user: req.params.id
     };
 

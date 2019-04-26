@@ -49,3 +49,8 @@
     max-height: calc(100% - 120px);
     overflow-y: scroll;
 }
+
+td {
+  padding-right: 150px;
+  padding-left:50px;
+}

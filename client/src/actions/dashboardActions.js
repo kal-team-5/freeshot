@@ -48,8 +48,8 @@ export const editProfile = (profileData,history) => dispatch => {
 };
 
 //Add follower
-export const addfollower = (id) => dispatch => {
-  axios.post(`/freeshot/dashboard/follow/${id}`)
+export const addfollow = (id,name,username) => dispatch => {
+  axios.post(`/freeshot/dashboard/follow/${id},${name},${username}`)
   .then(res => dispatch({
     type:GET_PROFILE,
     payload:res.data

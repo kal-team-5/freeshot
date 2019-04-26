@@ -15,7 +15,7 @@ export default class Landing extends Component {
             <p className="lead"> Create a Freeshot profile/portfolio, share posts & Comments</p>
             <hr />
             <Link to="/register" className="btn btn-lg btn-info mr-2">Sign Up</Link>
-            <Link to="login.html" className="btn btn-lg btn-light">Login</Link>
+            <Link to="/login" className="btn btn-lg btn-light">Login</Link>
           </div>
         </div>
       </div>
