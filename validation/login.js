@@ -15,10 +15,10 @@ module.exports = function validateLoginInput(data){
         errors.username ='username field is required';
     }
 
-  /*  if(!validator.isEmail(data.email)) {
-        errors.email ='Email is not valid';
-    }*/
-    
+    if(validator.isEmpty(data.name)) {
+        errors.username ='name field is required';
+    }
+   
     if (!validator.isLength(data.password,{min : 2,max:30})){
         errors.password = 'password must be between 2 and 30 characters';
     }

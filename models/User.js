@@ -12,7 +12,8 @@ const UserSchema = new Schema({
   //similar to handle
   username:{
       type:String,
-      required:true
+      required:true,
+      max: 40
   },
   date:{
       type:Date,

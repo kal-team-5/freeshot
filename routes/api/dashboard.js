@@ -96,7 +96,9 @@ router.post('/follow/:id',
             profile.followers.unshift({ user: req.user.id });
             profile.save().then(profile => res.json(profile));
          })
-        .catch(err => res.status(404).json({profile:'none profile exist'}));
+        .catch(err => {console.log(err);
+          res.status(404).json({profile:'none profile exist'});
+        });
 
     if(profile.following.filter(following => following.user.toString()===req.params.id).length>0)
     {
@@ -107,7 +109,10 @@ router.post('/follow/:id',
     profile.following.unshift({ user: req.params.id });
     profile.save().then(profile => res.json(profile)); 
   }) 
-      .catch(err => res.status(404).json({profile:'no profile exist'}));
+      .catch(err => {
+        console.log(err);
+        res.status(404).json({profile:'no profile exist'});
+      });
  });
      
   
@@ -214,8 +219,10 @@ router.post('/',
   //get fields
     const profileFields = {};
     profileFields.user = req.user.id;
+    profileFields.username = req.user.username;
+    profileFields.name = req.user.name;
     
-    if(req.body.username) profileFields.username = req.body.username;
+    
     if (req.body.email) profileFields.email = req.body.email;
     if (req.body.phone) profileFields.phone = req.body.phone;
     if (req.body.bio) profileFields.bio = req.body.bio;
