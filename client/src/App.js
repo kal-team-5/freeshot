@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 import Main from "./components/Main";
 import Dashboard from "./components/Dashboard";
 import DisplayAllImages from "./components/DisplayAllImages";
-import AddComments from "./components/AddComments";
+import AddCommentsForImage from "./components/AddCommentsForImage";
 import "./App.css";
 
 class App extends Component {
@@ -20,7 +20,7 @@ class App extends Component {
             <Route exact path="/image-upload" component={ImageUpload} />
             <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/all" component={DisplayAllImages} />
-            <Route exact path="/add-comments/:id" component={AddComments} />
+            <Route exact path="/add-comments/:id" component={AddCommentsForImage} />
           </div>
           <Footer />
         </div>
