@@ -117,10 +117,10 @@ ImageRouter.post(
       .then(image => {
         const newComment = {
           text: req.body.text,
-          username: req.body.username,
+          username:req.body.username,
           avatar:
             "//www.gravatar.com/avatar/209e93119c56effd0c8bc4321a6bff34?s=100&r=pg&d=mm", //req.body.avatar,
-          user: req.user.id //"TD_User1"
+          user:req.user.id//"TD_User1"
         };
 
         // Add to comments array
@@ -178,30 +178,35 @@ ImageRouter.post(
   "/like/:id",
   //passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findOne({ user: req.user.id }).then(profile => {
-      ImageModel.findById(req.params.id)
-        .then(image => {
-          if (
-            image.likes.filter(like => like.user.toString() === req.user.id)
-              .length > 0
-          ) {
-            return res
-              .status(400)
-              .json({ alreadyliked: "You have already liked the image" });
-          }
+    Profile.findOne({ user: req.user.id }).then(
+      profile => {
+        ImageModel.findById(req.params.id)
+          .then(image => {
+            if (
+              image.likes.filter(
+                like =>
+                  like.user.toString() ===
+                  req.user.id
+              ).length > 0
+            ) {
+              return res
+                .status(400)
+                .json({ alreadyliked: "You have already liked the image" });
+            }
 
-          // Adds user id to likes array
-          image.likes.unshift({
-            user: req.user.id
+            // Adds user id to likes array
+            image.likes.unshift({
+              user: req.user.id
+            });
+            // Saves like
+            image.save().then(image => res.json(image));
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(404).json({ imagenotfound: "No image post found" });
           });
-          // Saves like
-          image.save().then(image => res.json(image));
-        })
-        .catch(err => {
-          console.log(err);
-          res.status(404).json({ imagenotfound: "No image post found" });
-        });
-    });
+      }
+    );
   }
 );
 
