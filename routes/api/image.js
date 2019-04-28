@@ -10,6 +10,8 @@ const ImageModel = require("../../models/Image");
 //Validation
 const validateImageInput = require("../../validation/image-upload-validator");
 const validateComments = require("../../validation/add-comments-validator");
+//const userId = "5cba441d9979b100160cb7a6";
+//const username = "TD_User";
 
 // @route   GET freeshot/dashboard/image
 // @desc    Get Image Posts
@@ -52,13 +54,16 @@ ImageRouter.post(
     if (!isValid) {
       return res.status(500).json(errors);
     }
+
     //Save the ImagePost
     const newImagePost = new ImageModel({
       user: req.user.id,
+      //user: userId,
       url: req.body.url,
       caption: req.body.caption,
-      username: req.body.username
-      //avatar: req.body.avatar
+      //username: username
+      username: req.body.username,
+      avatar: req.body.avatar
     });
     newImagePost
       .save()
@@ -116,8 +121,9 @@ ImageRouter.post(
         const newComment = {
           text: req.body.text,
           username: req.body.username,
-          //avatar: req.body.avatar,
+          avatar: req.body.avatar,
           user: req.user.id
+          //user:req.user
         };
 
         // Add to comments array
@@ -128,7 +134,7 @@ ImageRouter.post(
       })
       .catch(err => {
         console.log(err);
-        res.status(404).json({ imagenotfound: "No Images found" });
+        res.status(500).json({ imagenotfound: "Error while adding comment" });
       });
   }
 );
@@ -172,23 +178,29 @@ ImageRouter.delete(
 // @access Private
 
 ImageRouter.post(
-  '/like/:id',
-  passport.authenticate('jwt', { session: false }),
+  "/like/:id",
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Profile.findOne({ user: req.user.id }).then(profile => {
       ImageModel.findById(req.params.id)
-      .then(image => {
-        if (image.likes.filter(like => like.user.toString() === req.user.id).length > 0
-        ) {
-          return res.status(400).json({ alreadyliked: 'You have already liked the image'});
-        }
+        .then(image => {
+          if (
+            image.likes.filter(like => like.user.toString() === req.user.id)
+              .length > 0
+          ) {
+            return res
+              .status(400)
+              .json({ alreadyliked: "You have already liked the image" });
+          }
 
-        // Adds user id to likes array
-        image.likes.unshift({ user: req.user.id });
-        // Saves like
-        image.save().then(image => res.json(image));
-      })
-      .catch(err => res.status(404).json({ imagenotfound: 'No image post found' }));
+          // Adds user id to likes array
+          image.likes.unshift({ user: req.user.id });
+          // Saves like
+          image.save().then(image => res.json(image));
+        })
+        .catch(err =>
+          res.status(404).json({ imagenotfound: "No image post found" })
+        );
     });
   }
 );
@@ -198,31 +210,35 @@ ImageRouter.post(
 // @access Private
 
 ImageRouter.post(
-  '/unlike/:id',
-  passport.authenticate('jwt', {session: false }),
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Profile.findOne({ user: req.user.id }).then(profile => {
       ImageModel.findById(req.params.id)
-      .then(image => {
-        if (
-          image.likes.filter(like => like.user.toString() === req.user.id).length === 0
-        ) {
-          return res
-            .status(400)
-            .json({ notliked: 'You have not liked this image'});
-        }
+        .then(image => {
+          if (
+            image.likes.filter(like => like.user.toString() === req.user.id)
+              .length === 0
+          ) {
+            return res
+              .status(400)
+              .json({ notliked: "You have not liked this image" });
+          }
 
-        // Get remove index
-        const removeIndex = ImageModel.likes
-        .map(item => item.user.toString())
-        .indexOf(req.user.id);
+          // Get remove index
+          const removeIndex = image.likes
+            .map(item => item.user.toString())
+            .indexOf(req.user.id);
 
-        //Splice likes array
-        image.likes.splice(removeIndex, 1);
-        // Save
-        image.save().then(image => res.json(image));
-      })
-      .catch(err => res.status(404).json({ imagenotfound: 'No image post found' }));
+          //Splice likes array
+          image.likes.splice(removeIndex, 1);
+          // Save
+          image.save().then(image => res.json(image));
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(404).json({ imagenotfound: "No image post found" });
+        });
     });
   }
 );
