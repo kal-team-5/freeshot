@@ -5,7 +5,7 @@ module.exports = function validateImageInput(formInput) {
   let errors = {};
   //ImageUpload Form.
   formInput.url = !isEmpty(formInput.url) ? formInput.url : "";
-  formInput.username = !isEmpty(formInput.username) ? formInput.username : "";
+  //formInput.username = !isEmpty(formInput.username) ? formInput.username : "";
 
   if (Validator.isEmpty(formInput.url)) {
     errors.url = "Image URL is required";
@@ -17,9 +17,9 @@ module.exports = function validateImageInput(formInput) {
     }
   }
 
-  if (Validator.isEmpty(formInput.username)) {
+  /*if (Validator.isEmpty(formInput.username)) {
     errors.username = "Username is required";
-  }
+  }*/
 
   return {
     errors,
