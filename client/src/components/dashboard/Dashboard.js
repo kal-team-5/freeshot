@@ -7,7 +7,7 @@ import Spinner from '../common/Spinner';
 //import DashboardActions from './ProfileActions';
 import Followers from './Followers';
 import Following from './Following';
-import DashboardActions from './DashboardActions';
+
 
 
 
@@ -53,10 +53,10 @@ import DashboardActions from './DashboardActions';
                     </div>  
                     <div className="row">
                         <div className="col-mb-2">
-                         <Followers followers={profile.followers} />
+                          <Followers followers={profile.followers} />
                          </div>
                          <div className="col-mb-4">
-                         <Following following={profile.following} /> 
+                          <Following following={profile.following} /> 
                          </div>
                         </div> 
                    </div>

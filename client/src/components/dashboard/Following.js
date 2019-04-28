@@ -8,19 +8,22 @@ import { unfollow } from '../../actions/dashboardActions';
 
 class Following extends Component {
     onDeleteClick(id) {
+       const r = window.confirm("Do you really want to unfollow?"); 
+       if(r == true){ 
         this.props.unfollow(id);
-      }
+        }
+   }
     render() {
         //console.log("edu" + this.props.followers.fl._id);
-        let following;
+     let following;
       if(this.props.following.length>0){
          following = this.props.following.map(fl => (
             <tr key={fl.user}>
               <td>{fl.username}</td>
               <td>
               <button
-              onClick={this.onDeleteClick.bind(this, fl.user)}
-              className="btn-group btn btn-light"
+                  onClick={this.onDeleteClick.bind(this, fl.user)}
+                  className="btn-group btn btn-light"
             >
               Following
             </button>

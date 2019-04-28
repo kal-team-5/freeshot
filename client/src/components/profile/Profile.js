@@ -14,8 +14,9 @@ class Profile extends Component {
     }
 
     onDeleteClick(id) {
-      this.props.unfollow(id);
-      window.location.reload();
+      
+          this.props.unfollow(id);
+          window.location.reload();
     }
 
   componentDidMount() {
@@ -47,12 +48,13 @@ class Profile extends Component {
     if (profile === null || loading) {
       profileContent = <Spinner />;
     } else {
+      if (!(profile.user === auth.user.id)){
       profileContent = (
         <div>
           <p>
-                <Link to="/profiles" className="btn btn-light mb-3 float-left">
-                    Back To Profiles
-                </Link>
+            <Link to="/profiles" className="btn btn-light mb-3 float-left">
+                Back To Profiles
+            </Link>
           </p>
           <div className="row">
               <div className="col-md-2">
@@ -62,7 +64,7 @@ class Profile extends Component {
                   <h3>{profile.name}</h3>
                </div>
                <div className="col-md-2">
-              { (profile.followers.filter(followers => followers.user.toString() === auth.user.id).length==0) ?
+              {  (profile.followers.filter(followers => followers.user.toString() === auth.user.id).length==0 ) ?
                 (<button  type="button"
                 onClick={this.onFollowClick.bind(this, profile.user,profile.name,profile.username)}
                 
@@ -78,6 +80,27 @@ class Profile extends Component {
         </div>
       );
     }
+  
+  else{
+    profileContent = (
+      <div>
+        <p>
+          <Link to="/profiles" className="btn btn-light mb-3 float-left">
+              Back To Profiles
+          </Link>
+        </p>
+        <div className="row">
+            <div className="col-md-2">
+                 <h3>{profile.username}</h3>
+             </div>
+              <div className="col-md-6">
+                <h3>{profile.name}</h3>
+             </div>
+           </div>
+    </div>  )  
+  }
+}
+ 
 
     return (
       <div className="profile">

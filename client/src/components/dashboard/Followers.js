@@ -24,7 +24,7 @@ class Followers extends Component {
       <button className="btn-group btn btn-light" data-toggle="modal" data-target="#myModal">
           Followers
       </button>
-     <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
