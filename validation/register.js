@@ -7,7 +7,7 @@ module.exports = function validateRegisterInput(data){
     data.name = !isEmpty(data.name) ? data.name : '';
     data.username = !isEmpty(data.username) ? data.username : '';
     data.password = !isEmpty(data.password) ? data.password : '';
-    data.password2 = !isEmpty(data.password2) ? data.password2 : ''; // this is not in model but need it in UI
+    data.password2 = !isEmpty(data.password2) ? data.password2 : '';
 
     if (!validator.isLength(data.name,{min : 2,max:30})){
         errors.name = 'Name must be between 2 and 30 characters';
@@ -17,18 +17,18 @@ module.exports = function validateRegisterInput(data){
     }
 
     if(validator.isEmpty(data.username)) {
-        errors.username ='username field is required';
+        errors.username ='Username field is required';
     }
    
     
     if (!validator.isLength(data.password,{min : 2,max:30})){
-        errors.password = 'password must be between 2 and 30 characters';
+        errors.password = 'Password must be between 2 and 30 characters';
     }
     if(validator.isEmpty(data.password)) {
-        errors.password ='password field is required';
+        errors.password ='Password field is required';
     }
     if(validator.isEmpty(data.password2)) {
-        errors.password2 ='confirm password field is required';
+        errors.password2 ='Confirm password field is required';
     }
 
     if(!validator.equals(data.password,data.password2)){
