@@ -25,7 +25,7 @@ class ImageUpload extends Component {
     e.preventDefault();
     const uploadImage = {
       url: this.state.url,
-      caption: this.state.caption/*,
+      caption: this.state.caption /*,
       username: this.state.username*/
     };
     //Upload image
@@ -38,11 +38,11 @@ class ImageUpload extends Component {
       });
   }
 
-  componentWillReceiveProps(nextProps) {
+  /*componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
-  }
+  }*/
 
   //ReactApi to handle exceptions
   componentDidCatch(error, info) {
@@ -56,38 +56,53 @@ class ImageUpload extends Component {
     const error = this.state.errors;
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <div className="input-group mb-3">
-            <input
-              className={classnames("form-control form-control-md input-md", {
-                "is-invalid": error
-              })}
-              placeholder="Please enter Image Url"
-              name="url"
-              value={this.state.url}
-              onChange={this.onChange}
-            />
-            {error.url && <div className="invalid-feedback">{error.url}</div>}
+      <div>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <h3 className="display-8 text-center">Upload Image</h3>
+              <form onSubmit={this.onSubmit}>
+                <div className="form-group">
+                  <input
+                    className={classnames(
+                      "form-control form-control-md input-md",
+                      {
+                        "is-invalid": error
+                      }
+                    )}
+                    placeholder="Upload Image size 600*600"
+                    name="url"
+                    value={this.state.url}
+                    onChange={this.onChange}
+                  />
+                  {error.url && (
+                    <div className="invalid-feedback">{error.url}</div>
+                  )}
+                </div>
+                <div className="form-group">
+                  <input
+                    className={classnames(
+                      "form-control form-control-md input-md",
+                      {
+                        "is-invalid": error
+                      }
+                    )}
+                    placeholder="Provide a caption"
+                    name="caption"
+                    value={this.state.caption}
+                    onChange={this.onChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <button type="submit" className="btn btn-dark">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-
-          <div className="input-group mb-3">
-            <input
-              className={classnames("form-control form-control-md input-md", {
-                "is-invalid": error
-              })}
-              placeholder="Provide a caption"
-              name="caption"
-              value={this.state.caption}
-              onChange={this.onChange}
-            />
-          </div>
-
-          <button type="submit" className="btn btn-dark">
-            Submit
-          </button>
         </div>
-      </form>
+      </div>
     );
   }
 }

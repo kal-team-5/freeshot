@@ -33,6 +33,11 @@ export default class Header extends React.Component {
             Login
           </Link>
         </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/dashboard">
+            Dashboard
+          </Link>
+        </li>
       </ul>
     );
     const authLinks = (
