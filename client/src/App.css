@@ -4,7 +4,7 @@
 
 .landing {
   position: relative;
-  background: url('./img/showcase1.jpg') no-repeat;
+  background: url("./img/showcase.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -37,7 +37,6 @@
 .form-control::placeholder {
   color: #bbb !important;
 }
-
 .modal-dialog,
 .modal-content {
     /* 80% of window height */
@@ -54,3 +53,4 @@ td {
   padding-right: 150px;
   padding-left:50px;
 }
+

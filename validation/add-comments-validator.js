@@ -6,10 +6,10 @@ module.exports = function validateComments(formInput) {
 
   //AddComments Form.
   formInput.text = !isEmpty(formInput.text) ? formInput.text : "";
-  formInput.username = !isEmpty(formInput.username) ? formInput.username : "";
+  //formInput.username = !isEmpty(formInput.username) ? formInput.username : "";
   
   if (!Validator.isEmpty(formInput.text)) {
-    if (!Validator.isLength(formInput.text, { min: 10, max: 300 })) {
+    if (!Validator.isLength(formInput.text, { min: 5, max: 300 })) {
       errors.text = "Comment must be between 10 and 300 characters";
     }
   }
@@ -18,9 +18,9 @@ module.exports = function validateComments(formInput) {
     errors.text = "Please add comments";
   }
 
-  if (Validator.isEmpty(formInput.username)) {
+  /*if (Validator.isEmpty(formInput.username)) {
     errors.username = "Username is required";
-  }
+  }*/
   return {
     errors,
     isValid: isEmpty(errors)
