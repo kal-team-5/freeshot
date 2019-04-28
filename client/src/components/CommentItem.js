@@ -29,7 +29,7 @@ export default class CommentItem extends React.Component {
     const comment = this.props.comment;
 
     return (
-      <div class="col-md-12 cell">
+      <div class="col-md-12 image cell ">
         <span class="col-md-2">
           <a href="profile.html">
             <img

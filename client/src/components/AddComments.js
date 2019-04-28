@@ -91,7 +91,7 @@ export default class AddComments extends Component {
     }
     return (
       <div className="container">
-        <div className="row">
+        <div className="image row">
           <div className="col-md-4 card card-body mb-2">
             <img src={this.state.imageSrc} alt={this.state.imageCaption} />
             <p>{this.state.imageCaption}</p>
@@ -125,7 +125,7 @@ export default class AddComments extends Component {
             </form>
           </div>
         </div>
-        <div className="row">{commentItems}</div>
+        <div className="image row">{commentItems}</div>
       </div>
     );
   }
