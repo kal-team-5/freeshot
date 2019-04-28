@@ -80,7 +80,7 @@ router.post('/login',(req,res) => {
     User.findOne({username})
      .then(user =>{
          if(!user){
-             errors.username ='user not found';
+             errors.username ='username not found';
              return res.status(400).json(errors);
          }
          //check password

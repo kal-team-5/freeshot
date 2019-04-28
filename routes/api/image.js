@@ -10,8 +10,6 @@ const ImageModel = require("../../models/Image");
 //Validation
 const validateImageInput = require("../../validation/image-upload-validator");
 const validateComments = require("../../validation/add-comments-validator");
-//const userId = "5cba441d9979b100160cb7a6";
-//const username = "TD_User";
 
 // @route   GET freeshot/dashboard/image
 // @desc    Get Image Posts
@@ -47,7 +45,7 @@ ImageRouter.get("/:id", (req, res) => {
 //@access Private
 ImageRouter.post(
   "/upload",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
     //Validate Input
     const { errors, isValid } = validateImageInput(req.body);
@@ -57,13 +55,12 @@ ImageRouter.post(
 
     //Save the ImagePost
     const newImagePost = new ImageModel({
-      user: req.user.id,
-      //user: userId,
+      user: req.user.id, //"5cba441d9979b100160cb7a6"
       url: req.body.url,
       caption: req.body.caption,
-      //username: username
-      username: req.body.username,
-      avatar: req.body.avatar
+      username: req.body.username, //"TD_User1"
+      avatar:
+        "//www.gravatar.com/avatar/209e93119c56effd0c8bc4321a6bff34?s=200&r=pg&d=mm" //req.body.avatar
     });
     newImagePost
       .save()
@@ -106,7 +103,7 @@ ImageRouter.delete(
 // @access  Private
 ImageRouter.post(
   "/comment/:id",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateComments(req.body);
 
@@ -120,17 +117,17 @@ ImageRouter.post(
       .then(image => {
         const newComment = {
           text: req.body.text,
-          username: req.body.username,
-          avatar: req.body.avatar,
-          user: req.user.id
-          //user:req.user
+          username:req.body.username,
+          avatar:
+            "//www.gravatar.com/avatar/209e93119c56effd0c8bc4321a6bff34?s=100&r=pg&d=mm", //req.body.avatar,
+          user:req.user.id//"TD_User1"
         };
 
         // Add to comments array
-        image.comments.unshift(newComment);
+        image.comments.unshift(newComment); //unshift adds element to the first position of the array
 
         // Save
-        image.save().then(image => res.json(image));
+        image.save().then(image => res.json(image.comments)); //returning the comments array
       })
       .catch(err => {
         console.log(err);
@@ -144,7 +141,7 @@ ImageRouter.post(
 // @access  Private
 ImageRouter.delete(
   "/comment/:id/:comment_id",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
     ImageModel.findById(req.params.id)
       .then(image => {
@@ -179,29 +176,37 @@ ImageRouter.delete(
 
 ImageRouter.post(
   "/like/:id",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findOne({ user: req.user.id }).then(profile => {
-      ImageModel.findById(req.params.id)
-        .then(image => {
-          if (
-            image.likes.filter(like => like.user.toString() === req.user.id)
-              .length > 0
-          ) {
-            return res
-              .status(400)
-              .json({ alreadyliked: "You have already liked the image" });
-          }
+    Profile.findOne({ user: req.user.id }).then(
+      profile => {
+        ImageModel.findById(req.params.id)
+          .then(image => {
+            if (
+              image.likes.filter(
+                like =>
+                  like.user.toString() ===
+                  req.user.id
+              ).length > 0
+            ) {
+              return res
+                .status(400)
+                .json({ alreadyliked: "You have already liked the image" });
+            }
 
-          // Adds user id to likes array
-          image.likes.unshift({ user: req.user.id });
-          // Saves like
-          image.save().then(image => res.json(image));
-        })
-        .catch(err =>
-          res.status(404).json({ imagenotfound: "No image post found" })
-        );
-    });
+            // Adds user id to likes array
+            image.likes.unshift({
+              user: req.user.id
+            });
+            // Saves like
+            image.save().then(image => res.json(image));
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(404).json({ imagenotfound: "No image post found" });
+          });
+      }
+    );
   }
 );
 

@@ -31,7 +31,7 @@ export default class RenderImage extends Component {
     const image = this.props.data;
 
     return (
-      <div className="col-md-3 cell">
+      <div className="col-md-3 image cell">
         <div className="cardLayout">
           <div key={image._id} className="card">
             <Link to={`/add-comments/${image._id}`}>
