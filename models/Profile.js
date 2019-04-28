@@ -53,6 +53,12 @@ social: {
       user:{
         type: Schema.Types.ObjectId,
         ref:'users'
+      },
+      name: {
+        type: String
+      },
+      username: {
+        type: String
       }
     }
   
@@ -62,7 +68,14 @@ social: {
      user:{
        type:Schema.Types.ObjectId,
        ref:'users'
-     }
+     },
+     name: {
+      type: String
+    },
+    username: {
+      type: String
+    }
+     
     }
   ],
   date: {
