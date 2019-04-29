@@ -260,7 +260,7 @@ router.get('/follower/:username',(req,res) =>{
 });
 
 // @route   Dashboard freeshot/dashboard
-// @desc    Create or edit user profile
+// @desc     edit user profile
 // @access  Private
 
 router.post('/',
@@ -318,6 +318,43 @@ router.post('/',
         }
       });
     });
+
+// @route   Dashboard freeshot/dashboard
+// @desc    Create user profile
+// @access  public
+
+   /*router.post('/',
+   (req,res) =>{
+   //  const {errors,isValid} = validateProfileInput(req.body);
+
+     //check validation
+    // if(!isValid){
+         //return errors with 400 status
+      //  return res.status(400).json(errors);
+   //  }
+  //get fields
+    const profileFields = {};
+    profileFields.user = req.user.id;
+    profileFields.username = req.user.username;
+    profileFields.name = req.user.name;
+    
+    
+    if (req.body.email) profileFields.email = "";
+    if (req.body.phone) profileFields.phone = "";
+    if (req.body.bio) profileFields.bio = "";
+    if (req.body.website) profileFields.website = "";
+    if (req.body.gender) profileFields.gender = "";
+  //social
+    profileFields.social = {};
+    if (req.body.youtube) profileFields.social.youtube = "";
+    if (req.body.twitter) profileFields.social.twitter = "";
+    if (req.body.facebook) profileFields.social.facebook = "";
+    if (req.body.linkedin) profileFields.social.linkedin = "";
+    if (req.body.instagram) profileFields.social.instagram = "";   
+    //save profile
+      new Profile(profileFields).save().then(profile => res.json(profile));  
+    });
+       */
 
 
  // @route   DELETE freeshot/dashboard/profile

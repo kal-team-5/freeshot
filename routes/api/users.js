@@ -54,8 +54,31 @@ router.post('/register',(req,res) => {
                 }
                 newUser.password=hash;
                 newUser.save()
-                 .then(user => res.json(user))
+                 .then(user => { 
+                 res.json(user)
+                 const profileFields = {};
+                 profileFields.user = user.id;
+                 profileFields.username = user.username;
+                 profileFields.name = user.name;
+                 profileFields.email = "";
+                  profileFields.phone = "";
+                  profileFields.bio = "";
+                 profileFields.website = "";
+                 profileFields.gender = "";
+               //social
+                 profileFields.social = {};
+                  profileFields.social.youtube = "";
+                 profileFields.social.twitter = "";
+                 profileFields.social.facebook = "";
+                  profileFields.social.linkedin = "";
+                 profileFields.social.instagram = "";   
+                 //save profile
+                   new Profile(profileFields).save().then(profile => res.json(profile));  
+                 
+                 }
+             )
                  .catch(err => console.log(err));
+
                })
            })
        }
