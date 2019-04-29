@@ -30,8 +30,8 @@ import {withRouter} from 'react-router-dom';
          name: this.state.name,
          username:this.state.username,
          password:this.state.password,
-         password2:this.state.password2,
-         errors:{}
+         password2:this.state.password2/*,Causing error while creating user
+         errors:{}*/
    
        };
 
