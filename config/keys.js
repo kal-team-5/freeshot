@@ -1,5 +1,5 @@
 module.exports = {
   
-  mongoURI:'mongodb://webdevkal1:mediatech1234@ds036648.mlab.com:36648/devconnector3',
+  mongoURI:'mongodb://rjl_dev:Welcome123@ds012889.mlab.com:12889/devconnector_kalacademy',
   secretOrKey: "secret"
 };
