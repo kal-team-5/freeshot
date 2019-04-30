@@ -41,10 +41,8 @@ class Profile extends Component {
 
   render() {
     const {auth} = this.props ;
-    
     const { profile, loading} = this.props.profile;
     let profileContent;
-
     if (profile === null || loading) {
       profileContent = <Spinner />;
     } else {
@@ -57,13 +55,12 @@ class Profile extends Component {
             </Link>
           </p>
           <div className="row">
-              <div className="col-md-2">
+              <div className="col-6">
+              <img src={profile.user.avatar} alt="" className="rounded-circle" />
                    <h3>{profile.username}</h3>
                </div>
-                <div className="col-md-6">
-                  <h3>{profile.name}</h3>
-               </div>
-               <div className="col-md-2">
+            
+               <div className="col-10">
               {  (profile.followers.filter(followers => followers.user.toString() === auth.user.id).length==0 ) ?
                 (<button  type="button"
                 onClick={this.onFollowClick.bind(this, profile.user,profile.name,profile.username)}

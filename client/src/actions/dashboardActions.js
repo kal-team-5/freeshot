@@ -39,7 +39,7 @@ export const getProfileByHandle = (username) => dispatch => {
 
 //edit profile
 export const editProfile = (profileData,history) => dispatch => {
-  axios.post('/freeshot/dashboard', profileData)
+  axios.post('/freeshot/dashboard/edit', profileData)
   .then(res => history.push('/dashboard'))
   .catch(err => dispatch({
     type: GET_ERRORS,
