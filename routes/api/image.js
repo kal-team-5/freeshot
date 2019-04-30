@@ -52,10 +52,10 @@ ImageRouter.post(
     if (!isValid) {
       return res.status(500).json(errors);
     }
-
+    console.log("what is user coming as->" + (req));
     //Save the ImagePost
     const newImagePost = new ImageModel({
-      user: req.user.id, //"5cba441d9979b100160cb7a6"
+      user: req.user, //.id, //"5cba441d9979b100160cb7a6"
       url: req.body.url,
       caption: req.body.caption,
       username: req.body.username, //"TD_User1"
@@ -78,11 +78,12 @@ ImageRouter.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findOne({ user: req.user.id }).then(profile => {
+    Profile.findOne({ user: req.user /*id*/ }).then(profile => {
       ImageModel.findById(req.params.id)
         .then(image => {
+          console.log(" Why undefined: " + JSON.stringify(image));
           // Check for post owner
-          if (image.user.toString() !== req.user.id) {
+          if (image.user.toString() !== req.user /*.id*/) {
             return res
               .status(401)
               .json({ notauthorized: "User not authorized" });
@@ -91,9 +92,10 @@ ImageRouter.delete(
           // Delete
           image.remove().then(() => res.json({ success: true }));
         })
-        .catch(err =>
-          res.status(404).json({ imagenotfound: "No Image found" })
-        );
+        .catch(error => {
+          console.log(error);
+          res.status(404).json({ imagenotfound: "No Image found" });
+        });
     });
   }
 );
