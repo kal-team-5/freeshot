@@ -10,7 +10,7 @@ class ImageUpload extends Component {
     this.state = {
       url: "",
       caption: "",
-      //username: this.props.auth.user.username,
+      username: this.props.username,
       errors: {}
     };
     this.onChange = this.onChange.bind(this);
@@ -25,13 +25,13 @@ class ImageUpload extends Component {
     e.preventDefault();
     const uploadImage = {
       url: this.state.url,
-      caption: this.state.caption /*,
-      username: this.state.username*/
+      caption: this.state.caption,
+      username: this.state.username
     };
     //Upload image
     axios
       .post("/freeshot/dashboard/image/upload", uploadImage)
-      .then(response => this.props.history.push("/all"))
+      .then(response => this.props.history.push("/dashboard"))
       .catch(err => {
         this.componentDidCatch(err, "Image Upload Failure");
         console.log(err);
@@ -67,10 +67,10 @@ class ImageUpload extends Component {
                     className={classnames(
                       "form-control form-control-md input-md",
                       {
-                        "is-invalid": error
+                        "is-invalid": error.url
                       }
                     )}
-                    placeholder="Upload Image size 600*600"
+                    placeholder="Ideal image upload size 200*200"
                     name="url"
                     value={this.state.url}
                     onChange={this.onChange}
@@ -84,7 +84,7 @@ class ImageUpload extends Component {
                     className={classnames(
                       "form-control form-control-md input-md",
                       {
-                        "is-invalid": error
+                        "is-invalid": error.caption
                       }
                     )}
                     placeholder="Provide a caption"
@@ -92,9 +92,12 @@ class ImageUpload extends Component {
                     value={this.state.caption}
                     onChange={this.onChange}
                   />
+                  {error.caption && (
+                    <div className="invalid-feedback">{error.caption}</div>
+                  )}
                 </div>
                 <div className="form-group">
-                  <button type="submit" className="btn btn-dark">
+                  <button type="submit" className="btn btn-md btn-info">
                     Submit
                   </button>
                 </div>

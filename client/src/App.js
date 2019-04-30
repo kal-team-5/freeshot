@@ -16,9 +16,9 @@ import Register from './components/auth/Register';
 import store from './store';
 import Dashboard from './components/dashboard/Dashboard';
 import SearchProfile from './components/search/SearchProfile';
-import ImageUpload from "./components/ImageUpload";
-import DisplayAllImages from "./components/DisplayAllImages";
-import AddCommentsForImage from "./components/AddCommentsForImage";
+import ImageUpload from "./components/image/ImageUpload";
+import DisplayAllImages from "./components/image/DisplayAllImages";
+import AddCommentsForImage from "./components/image/AddCommentsForImage";
 import './App.css';
 
 

@@ -10,11 +10,11 @@ import Spinner from "../common/Spinner";
 //import DashboardActions from './ProfileActions';
 import Followers from "./Followers";
 import Following from "./Following";
+import DisplayUserUploads from "../image/DisplayUserUploads";
 
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile(); //firing action
-
     /*setTimeout(
         function() {
           this.props.getCurrentProfile();
@@ -50,6 +50,9 @@ class Dashboard extends Component {
                     <i className="fas fa-user-circle text-info mr-1" /> Edit
                     Profile
                   </Link>
+                  <Link to="/image-upload" className="btn btn-md btn-info">
+                    Upload Image
+                  </Link>
                 </div>
               </div>
               <div className="row">
@@ -84,11 +87,11 @@ class Dashboard extends Component {
               {dashboardContent}
             </div>
           </div>
-        </div>
-        <div>
-          <Link to="/image-upload" className="btn btn-md btn-info">
-            Upload Image
-          </Link>
+          <br />
+
+          <div className="row">
+            <DisplayUserUploads username={user.username} />
+          </div>
         </div>
       </div>
     );

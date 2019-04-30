@@ -3,7 +3,8 @@ import "./Image.css";
 import React, { Component } from "react";
 import classnames from "classnames";
 import axios from "axios";
-import CommentItem from "./CommentItem.js";
+import "./Image.css";
+import CommentItem from "./CommentItem";
 
 export default class AddCommentsForImage extends Component {
   constructor(props) {
@@ -46,6 +47,8 @@ export default class AddCommentsForImage extends Component {
   }
   onSubmit(e) {
     e.preventDefault();
+    //clear the errors on form
+    
     const addComment = {
       text: this.state.text
     };
@@ -126,8 +129,14 @@ export default class AddCommentsForImage extends Component {
       <div className="container">
         <div className="image row">
           <div className="col-md-4 card card-body mb-2">
-            <img src={this.state.image.url} alt={this.state.image.caption} />
-            <p>{this.state.image.caption}</p>
+            <img
+              src={this.state.image.url}
+              alt={this.state.image.caption}
+              className="img-responsive"
+            />
+            <p>
+              <b>{this.state.image.caption}</b>
+            </p>
             <div className="row">
               <div className="col-md-6">
                 <span>
@@ -168,7 +177,7 @@ export default class AddCommentsForImage extends Component {
                     className={classnames(
                       "form-control form-control-md input-md",
                       {
-                        "is-invalid": error
+                        "is-invalid": error.text
                       }
                     )}
                     placeholder="Please add comments"
@@ -182,7 +191,7 @@ export default class AddCommentsForImage extends Component {
                   )}
                 </div>
 
-                <button type="submit" className="btn btn-dark">
+                <button type="submit" className="btn btn-md btn-info">
                   Add Comments
                 </button>
               </div>

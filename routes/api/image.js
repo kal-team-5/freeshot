@@ -45,20 +45,20 @@ ImageRouter.get("/:id", (req, res) => {
 //@access Private
 ImageRouter.post(
   "/upload",
-  //passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     //Validate Input
     const { errors, isValid } = validateImageInput(req.body);
     if (!isValid) {
       return res.status(500).json(errors);
     }
-    console.log("what is user coming as->" + (req));
+
     //Save the ImagePost
     const newImagePost = new ImageModel({
-      user: req.user, //.id, //"5cba441d9979b100160cb7a6"
+      user: req.user.id, //.id, //"5cba441d9979b100160cb7a6"
       url: req.body.url,
       caption: req.body.caption,
-      username: req.body.username, //"TD_User1"
+      username: req.user.username, //"TD_User1"
       avatar:
         "//www.gravatar.com/avatar/209e93119c56effd0c8bc4321a6bff34?s=200&r=pg&d=mm" //req.body.avatar
     });
@@ -78,23 +78,23 @@ ImageRouter.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findOne({ user: req.user /*id*/ }).then(profile => {
+    const errors = {};
+    Profile.findOne({ user: req.user.id }).then(profile => {
       ImageModel.findById(req.params.id)
         .then(image => {
-          console.log(" Why undefined: " + JSON.stringify(image));
           // Check for post owner
-          if (image.user.toString() !== req.user /*.id*/) {
-            return res
-              .status(401)
-              .json({ notauthorized: "User not authorized" });
+          if (image.user.toString() !== req.user.id) {
+            errors.text = "Failure: User does not match ";
+            return res.status(500).json(errors);
           }
 
           // Delete
           image.remove().then(() => res.json({ success: true }));
         })
         .catch(error => {
+          errors.text = "No Image found";
           console.log(error);
-          res.status(404).json({ imagenotfound: "No Image found" });
+          res.status(500).json(errors);
         });
     });
   }
@@ -105,7 +105,7 @@ ImageRouter.delete(
 // @access  Private
 ImageRouter.post(
   "/comment/:id",
-  //passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateComments(req.body);
 
@@ -119,10 +119,11 @@ ImageRouter.post(
       .then(image => {
         const newComment = {
           text: req.body.text,
-          username: req.body.username,
+          user: req.user.id,
+          username: req.user.username,
           avatar:
-            "//www.gravatar.com/avatar/209e93119c56effd0c8bc4321a6bff34?s=100&r=pg&d=mm", //req.body.avatar,
-          user: req.user.id //"TD_User1"
+            "//www.gravatar.com/avatar/209e93119c56effd0c8bc4321a6bff34?s=100&r=pg&d=mm" //req.body.avatar,
+          //"TD_User1"
         };
 
         // Add to comments array
@@ -143,7 +144,7 @@ ImageRouter.post(
 // @access  Private
 ImageRouter.delete(
   "/comment/:id/:comment_id",
-  //passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     ImageModel.findById(req.params.id)
       .then(image => {
@@ -178,7 +179,7 @@ ImageRouter.delete(
 
 ImageRouter.post(
   "/like/:id",
-  //passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Profile.findOne({ user: req.user.id }).then(profile => {
       ImageModel.findById(req.params.id)
@@ -244,5 +245,27 @@ ImageRouter.post(
     });
   }
 );
+
+// @route   GET freeshot/dashboard/image/username/:username
+// @desc    Get images by username
+// @access  Public
+
+ImageRouter.get("/username/:username", (req, res) => {
+  const errors = {};
+
+  ImageModel.find({ username: req.params.username })
+    .then(images => {
+      if (!images) {
+        //errors.nouser = 'There is no user exist of this username ';
+        errors.noimages = "There are no images uploaded";
+        return res.status(404).json(errors);
+      }
+      res.json(images);
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+});
 
 module.exports = ImageRouter;
