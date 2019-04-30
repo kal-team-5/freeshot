@@ -12,10 +12,11 @@ class ProfileItem extends Component {
         <div className="row">
           <div className="col-2"></div>
           <div className="col-6">
+          <img src={profile.user.avatar} alt="" className="rounded-circle" />
           <h3>{profile.username}</h3>
           </div>
           <div className="col-10 col-md-4 col-8">
-            
+          
             <Link to={`/profile/${profile.username}`} className="btn btn-info">
               View Profile
             </Link>

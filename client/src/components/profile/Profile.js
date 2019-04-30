@@ -9,7 +9,6 @@ import {
   unfollow,
   clearCurrentProfile
 } from "../../actions/dashboardActions";
-import DisplayUserUploads from "../image/DisplayUserUploads";
 
 class Profile extends Component {
   onFollowClick(id, name, username) {
@@ -40,10 +39,8 @@ class Profile extends Component {
 
   render() {
     const { auth } = this.props;
-
     const { profile, loading } = this.props.profile;
     let profileContent;
-
     if (profile === null || loading) {
       profileContent = <Spinner />;
     } else {
@@ -56,13 +53,16 @@ class Profile extends Component {
               </Link>
             </p>
             <div className="row">
-              <div className="col-md-2">
+              <div className="col-6">
+                <img
+                  src={profile.user.avatar}
+                  alt=""
+                  className="rounded-circle"
+                />
                 <h3>{profile.username}</h3>
               </div>
-              <div className="col-md-6">
-                <h3>{profile.name}</h3>
-              </div>
-              <div className="col-md-2">
+
+              <div className="col-10">
                 {profile.followers.filter(
                   followers => followers.user.toString() === auth.user.id
                 ).length == 0 ? (
@@ -89,6 +89,10 @@ class Profile extends Component {
                 )}
               </div>
             </div>
+
+            <div className="row">
+              <DisplayUserUploads username={profile.username} />
+            </div>
           </div>
         );
       } else {
@@ -107,6 +111,7 @@ class Profile extends Component {
                 <h3>{profile.name}</h3>
               </div>
             </div>
+
             <div className="row">
               <DisplayUserUploads username={profile.username} />
             </div>
@@ -121,7 +126,6 @@ class Profile extends Component {
           <div className="row">
             <div className="col-md-12">{profileContent}</div>
           </div>
-          
         </div>
       </div>
     );

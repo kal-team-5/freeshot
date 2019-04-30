@@ -15,6 +15,10 @@ const UserSchema = new Schema({
       required:true,
       max: 40
   },
+  avatar:{
+    type:String,
+    required:false
+},
   date:{
       type:Date,
       default:Date.now

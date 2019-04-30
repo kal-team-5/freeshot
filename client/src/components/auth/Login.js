@@ -47,7 +47,10 @@ import classnames from 'classnames';
        }
      }
   render() {
-    const {errors} = this.state;  //value from store (errors = this.state.errors)
+    //console.log(this.props);
+    const {errors} = this.state; 
+    console.log(this.props.errors);
+     //value from store (errors = this.state.errors)
      const {user} = this.props.auth //value from store  (user = this.props.auth)
 
     return (
