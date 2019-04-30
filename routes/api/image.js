@@ -45,7 +45,7 @@ ImageRouter.get("/:id", (req, res) => {
 //@access Private
 ImageRouter.post(
   "/upload",
-  //passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     //Validate Input
     const { errors, isValid } = validateImageInput(req.body);
@@ -103,7 +103,7 @@ ImageRouter.delete(
 // @access  Private
 ImageRouter.post(
   "/comment/:id",
-  //passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateComments(req.body);
 
@@ -176,7 +176,7 @@ ImageRouter.delete(
 
 ImageRouter.post(
   "/like/:id",
-  //passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Profile.findOne({ user: req.user.id }).then(profile => {
       ImageModel.findById(req.params.id)

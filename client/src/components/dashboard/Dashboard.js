@@ -31,8 +31,9 @@ import Following from './Following';
       }
 
   render() {
-    //console.log("profile" + this.props.profile.profile);
+    
     const {user}= this.props.auth;
+    
     const {profile,loading}  = this.props.profile;
     let dashboardContent;
     if(profile === null || loading){
@@ -44,20 +45,28 @@ import Following from './Following';
                 <div>
                  <div className="container">
                  <div className="row">
-                  <div className="lead text-muted col-mb-2">Welcome {user.username}</div>
-                     <div className="btn-group  col-mb-4" role="group">
+                 <img src={profile.user.avatar} alt="" className="rounded-circle" />
+                  <div className="lead text-muted col-2">Welcome {user.username}</div>
+                     <div className="btn" >
                       <Link to="/edit-profile" className="btn btn-light">
-                        <i className="fas fa-user-circle text-info mr-1" /> Edit Profile
+                        <i className="fas fa-user-circle " /> Edit Profile
                       </Link>
                       </div>
                     </div>  
                     <div className="row">
-                        <div className="col-mb-2">
+                        <div className="col-2">
                           <Followers followers={profile.followers} />
+                          <span style={{  marginLeft: '25px' }}>{profile.followers.length}</span> 
                          </div>
-                         <div className="col-mb-4">
+                         <div className="col-4">
                           <Following following={profile.following} /> 
+                          <span style={{  marginLeft: '25px' }}>{profile.following.length}</span> 
                          </div>
+                         <div>
+                           <Link to="/image-upload" className="btn btn-md btn-info">
+                               Upload Image
+                            </Link>
+                           </div>
                         </div> 
                    </div>
                   
