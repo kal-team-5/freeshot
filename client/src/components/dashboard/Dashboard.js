@@ -66,11 +66,6 @@ class Dashboard extends Component {
                     {profile.following.length}
                   </span>
                 </div>
-                <div>
-                  <Link to="/image-upload" className="btn btn-md btn-info">
-                    Upload Image
-                  </Link>
-                </div>
               </div>
             </div>
 

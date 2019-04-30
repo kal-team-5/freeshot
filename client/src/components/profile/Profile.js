@@ -9,6 +9,7 @@ import {
   unfollow,
   clearCurrentProfile
 } from "../../actions/dashboardActions";
+import DisplayUserUploads from "../image/DisplayUserUploads";
 
 class Profile extends Component {
   onFollowClick(id, name, username) {
