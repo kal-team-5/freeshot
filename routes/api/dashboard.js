@@ -340,7 +340,7 @@ router.post(
 // @desc    Delete user and profile
 // @access  Private
 router.delete(
-  "/profile",
+  "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Profile.findOneAndRemove({ user: req.user.id }).then(() => {
