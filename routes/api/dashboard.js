@@ -282,7 +282,7 @@ router.get("/follower/:username", (req, res) => {
 // @access  Private
 
 router.post(
-  "/",
+  "/edit",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateProfileInput(req.body);
