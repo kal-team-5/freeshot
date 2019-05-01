@@ -319,19 +319,8 @@ router.post(
           { $set: profileFields },
           { new: true }
         ).then(profile => res.json(profile));
-      } else {
-        //create
-
-        //check if username exists
-        Profile.findOne({ username: profileFields.username }).then(profile => {
-          if (profile) {
-            errors.username = "that username already exist";
-            res.status(400).json(errors);
-          }
-          //save profile
-          new Profile(profileFields).save().then(profile => res.json(profile));
-        });
       }
+      
     });
   }
 );
