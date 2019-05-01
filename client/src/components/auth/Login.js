@@ -38,7 +38,6 @@ import classnames from 'classnames';
       }
      
       componentWillReceiveProps(nextProps){  //new set of props
-       console.log("ccc" + nextProps); 
        if (nextProps.auth.isAuthenticated){
           this.props.history.push('/dashboard');
         }

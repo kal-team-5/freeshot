@@ -26,12 +26,15 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
+
   User.findOne({ username: req.body.username })
     .then(user => {
       if (user) {
         errors.username = "Username already exists";
         return res.status(400).json(errors);
-
+      }
+  })
+  .catch(error => console.log(error));
     }
   })
    User.findOne({username: req.body.username})
@@ -162,7 +165,6 @@ router.get(
       name: req.user.name,
       username: req.user.username
     });
-  }
-);
+  });
 
 module.exports = router;

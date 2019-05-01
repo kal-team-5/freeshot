@@ -1,10 +1,10 @@
-.img {
+img {
   width: 100%;
 }
 
 .landing {
   position: relative;
-  background: url('./img/landingphoto.jpg') no-repeat;
+  background: url("./img/landingphoto.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -39,18 +39,17 @@
 }
 .modal-dialog,
 .modal-content {
-    /* 80% of window height */
-    height: 80%;
+  /* 80% of window height */
+  height: 80%;
 }
 
 .modal-body {
-    /* 100% = dialog height, 120px = header + footer */
-    max-height: calc(100% - 120px);
-    overflow-y: scroll;
+  /* 100% = dialog height, 120px = header + footer */
+  max-height: calc(100% - 120px);
+  overflow-y: scroll;
 }
 
 td {
   padding-right: 150px;
-  padding-left:50px;
+  padding-left: 50px;
 }
-

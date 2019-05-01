@@ -6,47 +6,50 @@ import "./Image.css";
 export default class RenderImage extends Component {
   constructor(props) {
     super(props);
-    this.onClick = this.onClick.bind(this);
+    this.state = {
+      errors: {} //Holds HTTP 400/500 errors
+    };
+    this.onChildDelete = this.onChildDelete.bind(this);
   }
 
-  onClick(imageId) {
-    Axios.delete("freeshot/dashboard/image/" + imageId)
-      .then(response => this.props.history.push("/all"))
-      .catch(error => {
-        this.componentDidCatch(error, "Delete image failed");
-        console.log(error);
-      });
+  //OnImage delete
+  onChildDelete(e) {
+    e.preventDefault();
+    this.props.deleteAction(this.props.data._id);
   }
 
   //ReactApi to handle exceptions
   componentDidCatch(error, info) {
-    if (error) {
+    if (error && error.length > 0) {
       this.setState({
-        errors: error.response.data
+        errors: error.response.data.text //exception message inside errors.text. errors{}=error.response.data
       });
     }
   }
 
   render() {
     const image = this.props.data;
+    const error = this.state.errors;
 
     return (
-      <div className="col-md-3 image cell">
+      <div style={{ margin: "5px" }}>
         <div className="cardLayout">
           <div key={image._id} className="card">
             <Link to={`/add-comments/${image._id}`}>
               <img
-                className="img-responsive"
+                className="img-responsive img-thumbnail"
                 src={image.url}
                 alt={image.caption}
               />
             </Link>
           </div>
-          <p className="w-50 float-left"><b>{image.caption}</b></p>
+          <p className="w-50 float-left">
+            <b>{image.caption}</b>
+          </p>
           <span className="w-50 float-right text-right">
             <button
               className="btn btn-sm btn-danger"
-              onClick={this.onClick.bind(this, image._id)}
+              onClick={this.onChildDelete}
             >
               {" "}
               <i className="fas fa-times" />

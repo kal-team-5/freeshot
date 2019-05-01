@@ -9,6 +9,7 @@ export default class DisplayAllImages extends Component {
     this.state = {
       images: []
     };
+    this.onDeleteClick = this.onDeleteClick.bind(this);
   }
 
   //API call to get list of all images
@@ -20,6 +21,24 @@ export default class DisplayAllImages extends Component {
       .catch(err => console.log(err));
   }
 
+  //Delete the image
+  onDeleteClick(imageId) {
+    alert("Deleting the Image ");
+    Axios.delete("/freeshot/dashboard/image/" + imageId)
+      .then(response => {
+        const updatedList = this.state.images.filter(
+          image => image._id !== imageId
+        );
+        this.setState({
+          images: updatedList //Updates image list in the UI post-delete
+        });
+      })
+      .catch(error => {
+        this.componentDidCatch(error, "Delete image failed");
+        console.log(error);
+      });
+  }
+
   render() {
     const { images } = this.state;
     let allImages = null;
@@ -29,7 +48,11 @@ export default class DisplayAllImages extends Component {
           (allImages =
             images.length > 0
               ? (allImages = images.map(image => (
-                  <RenderImage key={image._id} data={image} />
+                  <RenderImage
+                    key={image._id}
+                    data={image}
+                    deleteAction={this.onDeleteClick}
+                  />
                 )))
               : null)
         }

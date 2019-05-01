@@ -10,6 +10,7 @@ import Spinner from "../common/Spinner";
 //import DashboardActions from './ProfileActions';
 import Followers from "./Followers";
 import Following from "./Following";
+import DisplayUserUploads from "../image/DisplayUserUploads";
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -35,11 +36,13 @@ class Dashboard extends Component {
           <div>
             <div className="container">
               <div className="row">
+
                 <img className="col-md-2"
-                  src={profile.user.avatar}
+                 src={profile.user.avatar}
                   alt=""
                   className="rounded-circle"
                 />
+
                 <div className="lead text-muted col-md-2">
                   Welcome {user.username}
                 </div>
@@ -47,7 +50,7 @@ class Dashboard extends Component {
                   <Link to="/edit-profile" className="btn btn-light">
                     <i className="fas fa-user-circle " /> Edit Profile
                   </Link>
-                </div>
+                 </div>
               </div>
               <div className="row">
                 <div className="col-2">
@@ -67,7 +70,7 @@ class Dashboard extends Component {
                     Upload Image
                   </Link>
                 </div>
-              </div>
+               </div>
             </div>
 
             <div style={{ marginBottom: "60px" }} />
@@ -91,6 +94,11 @@ class Dashboard extends Component {
               <h1 className="display-4">Dashboard</h1>
               {dashboardContent}
             </div>
+          </div>
+          <br />
+
+          <div className="row">
+            <DisplayUserUploads username={user.username} />
           </div>
         </div>
       </div>

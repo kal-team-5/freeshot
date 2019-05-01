@@ -20,18 +20,19 @@ export default class CommentItem extends React.Component {
 
     return (
       <div className="row">
-        <div className="col-md-2">
+        <div className="col-md-1">
           <img
             className="rounded-circle d-none d-md-block"
             src={comment.avatar}
             alt=""
           />
         </div>
-        <div className="col-md-3 text-center">{comment.username}</div>
+        <div className="col-md-3 text-left">{comment.username}</div>
         <div className="col-md-5" style={{ wordWrap: "break-word" }}>
           {comment.text}
         </div>
         <div className="col-md-2">
+          {}
           <button
             onClick={this.onChildDelete}
             type="button"
