@@ -36,22 +36,21 @@ class Dashboard extends Component {
           <div>
             <div className="container">
               <div className="row">
-                <img
-                  src={profile.user.avatar}
+
+                <img className="col-md-2"
+                 src={profile.user.avatar}
                   alt=""
                   className="rounded-circle"
                 />
-                <div className="lead text-muted col-2">
+
+                <div className="lead text-muted col-md-2">
                   Welcome {user.username}
                 </div>
-                <div className="btn">
+                <div className="btn col-md-6">
                   <Link to="/edit-profile" className="btn btn-light">
                     <i className="fas fa-user-circle " /> Edit Profile
                   </Link>
-                  <Link to="/image-upload" className="btn btn-md btn-info">
-                    Upload Image
-                  </Link>
-                </div>
+                 </div>
               </div>
               <div className="row">
                 <div className="col-2">
@@ -66,7 +65,12 @@ class Dashboard extends Component {
                     {profile.following.length}
                   </span>
                 </div>
-              </div>
+                <div>
+                  <Link to="/image-upload" className="btn btn-md btn-info">
+                    Upload Image
+                  </Link>
+                </div>
+               </div>
             </div>
 
             <div style={{ marginBottom: "60px" }} />

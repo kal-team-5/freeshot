@@ -35,8 +35,9 @@ router.post("/register", (req, res) => {
       }
   })
   .catch(error => console.log(error));
-
-  User.findOne({username: req.body.username})
+    }
+  })
+   User.findOne({username: req.body.username})
    .then(user => {
        if (user) {
            errors.username= 'username already exists';
