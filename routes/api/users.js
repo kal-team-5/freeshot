@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const gravatar =require('gravatar');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const keys= require('../../config/keys');
-const passport = require('passport');
-
+const gravatar = require("gravatar");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/keys");
+const passport = require("passport");
 
 //load user model
 const User = require("../../models/User");
@@ -97,7 +96,66 @@ router.post("/register", (req, res) => {
    })
    .catch(err => console.log(err));
 
-      
+  User.findOne({ username: req.body.username })
+    .then(user => {
+      if (user) {
+        errors.username = "username already exists";
+        return res.status(400).json(errors);
+      } else {
+        const avatar = gravatar.url(req.body.email, {
+          s: "100",
+          r: "pg",
+          d: "mm"
+        });
+        const newUser = new User({
+          name: req.body.name,
+          username: req.body.username,
+          password: req.body.password,
+          avatar //avatar:avatar
+        });
+        bcrypt.genSalt(10, (err, salt) => {
+          //generate a salt(key) after going 10 cycle.
+          if (err) {
+            errors.password = "failed encrypting";
+            return res.status(400).json(errors);
+          }
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) {
+              errors.password = "failed hashing";
+              return res.status(400).json(errors);
+            }
+            newUser.password = hash;
+            newUser
+              .save()
+              .then(user => {
+                res.json(user);
+                const profileFields = {};
+                profileFields.user = user.id;
+                profileFields.username = user.username;
+                profileFields.name = user.name;
+                profileFields.email = "";
+                profileFields.phone = "";
+                profileFields.bio = "";
+                profileFields.website = "";
+                profileFields.gender = "";
+                //social
+                profileFields.social = {};
+                profileFields.social.youtube = "";
+                profileFields.social.twitter = "";
+                profileFields.social.facebook = "";
+                profileFields.social.linkedin = "";
+                profileFields.social.instagram = "";
+                //save profile
+                new Profile(profileFields)
+                  .save()
+                  .then(profile => res.json(profile));
+              })
+              .catch(err => console.log(err));
+          });
+        });
+      }
+    })
+    .catch(err => console.log(err));
 });
 
 //@ route Post freeshot/users/login
@@ -165,6 +223,7 @@ router.get(
       name: req.user.name,
       username: req.user.username
     });
-  });
+  }
+);
 
 module.exports = router;
