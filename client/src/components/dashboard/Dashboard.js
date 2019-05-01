@@ -36,11 +36,13 @@ class Dashboard extends Component {
           <div>
             <div className="container">
               <div className="row">
-                <img
-                  src={profile.user.avatar}
-                  alt=""
-                  className="rounded-circle"
-                />
+                <div className="col-md-2">
+                  <img
+                    src={profile.user.avatar}
+                    alt=""
+                    className="rounded-circle"
+                  />
+                </div>
                 <div className="lead text-muted col-2">
                   Welcome {user.username}
                 </div>
@@ -51,6 +53,12 @@ class Dashboard extends Component {
                   <Link to="/image-upload" className="btn btn-md btn-info">
                     Upload Image
                   </Link>
+                  <button
+                    onClick={this.onDeleteClick.bind(this)}
+                    className="btn btn-danger"
+                  >
+                    Delete My Account
+                  </button>
                 </div>
               </div>
               <div className="row">
@@ -68,15 +76,8 @@ class Dashboard extends Component {
                 </div>
               </div>
             </div>
-
             <div style={{ marginBottom: "60px" }} />
             <p className="lead text-muted">{user.name}</p>
-            <button
-              onClick={this.onDeleteClick.bind(this)}
-              className="btn btn-danger"
-            >
-              Delete My Account
-            </button>
           </div>
         );
       }
@@ -101,6 +102,7 @@ class Dashboard extends Component {
     );
   }
 }
+
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   deleteAccount: PropTypes.func.isRequired,

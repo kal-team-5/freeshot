@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import "./Image.css";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-export default class RenderImage extends Component {
+class RenderImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +32,8 @@ export default class RenderImage extends Component {
   render() {
     const image = this.props.data;
     const error = this.state.errors;
-
+    const loggedInUser = this.props.auth.user.username;
+    //console.log("User name in auth object: " + this.props.auth.user.username);
     return (
       <div style={{ margin: "5px" }}>
         <div className="cardLayout">
@@ -46,17 +49,29 @@ export default class RenderImage extends Component {
           <p className="w-50 float-left">
             <b>{image.caption}</b>
           </p>
-          <span className="w-50 float-right text-right">
-            <button
-              className="btn btn-sm btn-danger"
-              onClick={this.onChildDelete}
-            >
-              {" "}
-              <i className="fas fa-times" />
-            </button>
-          </span>
+          {image.username === loggedInUser ? (
+            <span className="w-50 float-right text-right">
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={this.onChildDelete}
+              >
+                {" "}
+                <i className="fas fa-times" />
+              </button>
+            </span>
+          ) : null}
         </div>
       </div>
     );
   }
 }
+
+RenderImage.propTypes = {
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = reduxState => ({
+  auth: reduxState.auth
+});
+
+export default connect(mapStateToProps)(RenderImage);
