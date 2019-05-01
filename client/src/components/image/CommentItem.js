@@ -1,7 +1,9 @@
 import React from "react";
 import "./Image.css";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-export default class CommentItem extends React.Component {
+class CommentItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +19,7 @@ export default class CommentItem extends React.Component {
   }
   render() {
     const comment = this.props.comment;
-
+    const loggedInUser = this.props.auth.user.username;
     return (
       <div className="row">
         <div className="col-md-1">
@@ -32,16 +34,26 @@ export default class CommentItem extends React.Component {
           {comment.text}
         </div>
         <div className="col-md-2">
-          {}
-          <button
-            onClick={this.onChildDelete}
-            type="button"
-            className="btn btn-sm btn-danger mr-1"
-          >
-            <i className="fas fa-times" />
-          </button>
+          {comment.username === loggedInUser ? (
+            <button
+              onClick={this.onChildDelete}
+              type="button"
+              className="btn btn-sm btn-danger mr-1"
+            >
+              <i className="fas fa-times" />
+            </button>
+          ) : null}
         </div>
       </div>
     );
   }
 }
+CommentItem.propTypes = {
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = reduxState => ({
+  auth: reduxState.auth
+});
+
+export default connect(mapStateToProps)(CommentItem);

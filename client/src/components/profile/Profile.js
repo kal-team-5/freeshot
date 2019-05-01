@@ -54,7 +54,7 @@ class Profile extends Component {
               </Link>
             </p>
             <div className="row">
-              <div className="col-6">
+              <div className="col-md-2">
                 <img
                   src={profile.user.avatar}
                   alt=""
@@ -92,7 +92,7 @@ class Profile extends Component {
             </div>
 
             <div className="row">
-              <DisplayUserUploads username={profile.username} />
+              <DisplayUserUploads username={this.props.match.params.username} />
             </div>
           </div>
         );
@@ -114,7 +114,7 @@ class Profile extends Component {
             </div>
 
             <div className="row">
-              <DisplayUserUploads username={profile.username} />
+              <DisplayUserUploads username={this.props.match.params.username} />
             </div>
           </div>
         );

@@ -17,7 +17,6 @@ import store from './store';
 import Dashboard from './components/dashboard/Dashboard';
 import SearchProfile from './components/search/SearchProfile';
 import ImageUpload from "./components/image/ImageUpload";
-import DisplayAllImages from "./components/image/DisplayAllImages";
 import AddCommentsForImage from "./components/image/AddCommentsForImage";
 import './App.css';
 
@@ -60,7 +59,7 @@ class App extends Component {
               <Route exact path="/profile/:username" component={Profile} />
               <Route exact path="/search/:username" component={SearchProfile} />
               <Route exact path="/image-upload" component={ImageUpload} />
-              <Route exact path="/all" component={DisplayAllImages} />
+              
             
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
